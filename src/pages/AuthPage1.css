@@ -1,0 +1,279 @@
+/* src/pages/AuthPage1.css */
+
+/* Global Styling for the Split Page Layout */
+.auth-page-split-container {
+    display: flex;
+    /* Ensure the container takes up the full screen */
+    min-height: 100vh; 
+    /* Use a dark background color for the whole page */
+    background-color: #121212; 
+    font-family: 'Arial', sans-serif;
+    color: #f0f0f0; /* Light text color */
+}
+
+/* ---------------------------------- */
+/* Left Content Section (Image & Text) */
+/* ---------------------------------- */
+.auth-content-left {
+    /* Takes 60% of the screen width */
+    flex: 3; 
+    
+    /* ❌ DELETE THIS LINE (or comment it out) 
+       background-image: url('./path/to/old/image.jpg'); */
+    
+    /* KEEP THESE LINES: */
+    background-size: cover;
+    background-position: center top;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1; 
+}
+
+.auth-content-left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Dark overlay for better contrast */
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 2; 
+}
+
+.content-overlay {
+    position: relative;
+    z-index: 3; /* Must be above the ::before overlay */
+    text-align: left;
+    padding: 40px;
+    color: #ffffff;
+    max-width: 80%;
+}
+
+.content-overlay h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.content-overlay .tagline {
+    font-size: 1.8em;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* ---------------------------------- */
+/* Right Form Section (Login/Sign Up) */
+/* ---------------------------------- */
+.auth-form-right {
+    /* Takes 40% of the screen width */
+    flex: 2; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.form-card {
+    /* Dark card background, matching the image */
+    background-color: #1a1a1a; 
+    padding: 50px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-card h2 {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #f0f0f0;
+    margin-bottom: 5px;
+}
+
+.form-card .subtitle {
+    color: #aaa;
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+/* Input Styling (Dark theme & Icon) */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    color: #888;
+    font-size: 1.1em;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 45px; /* Adjust padding for the icon */
+    border: 1px solid #333;
+    border-radius: 6px;
+    font-size: 1em;
+    /* Dark input field background */
+    background-color: #242424; 
+    color: #f0f0f0;
+    transition: border-color 0.3s;
+}
+
+.input-group input::placeholder {
+    color: #888;
+}
+
+.input-group input:focus {
+    border-color: #009688; /* Teal/cyan highlight for focus */
+    outline: none;
+    box-shadow: 0 0 0 1px #009688;
+}
+
+/* Main Sign Up/Login Button */
+.main-auth-button {
+    background-color: #009688; /* Primary action button color (Teal) */
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.main-auth-button:hover {
+    background-color: #00796b; /* Darker teal on hover */
+}
+
+/* OR Divider */
+.or-divider {
+    text-align: center;
+    color: #555;
+    font-size: 0.9em;
+    margin: 10px 0;
+    position: relative;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #333;
+}
+
+.or-divider::before {
+    left: 0;
+}
+
+.or-divider::after {
+    right: 0;
+}
+
+/* Social Login Buttons */
+.social-button {
+    padding: 12px 20px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #242424; /* Background for social buttons */
+    color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.social-button:hover {
+    background-color: #333;
+    border-color: #555;
+}
+
+.social-icon {
+    font-size: 1.2em;
+}
+
+/* Toggle Link Styling */
+.account-toggle-area {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.toggle-link {
+    color: #009688; /* Teal color for the link */
+    cursor: pointer;
+    font-weight: 600;
+    transition: color 0.3s;
+    text-decoration: none;
+}
+
+.toggle-link:hover {
+    color: #00796b;
+    text-decoration: underline;
+}
+
+/* Error Message Styling */
+.error-message {
+    color: #ff6b6b; /* Soft red for errors */
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* ---------------------------------- */
+/* Responsive Design (Mobile/Tablet) */
+/* ---------------------------------- */
+@media (max-width: 900px) {
+    .auth-page-split-container {
+        /* Stack sections vertically on smaller screens */
+        flex-direction: column; 
+    }
+
+    .auth-content-left {
+        /* Content takes less height on mobile */
+        min-height: 250px; 
+        flex: none;
+    }
+
+    .auth-form-right {
+        /* Form takes the full width and minimal height */
+        flex: none; 
+    }
+
+    .content-overlay h1 {
+        font-size: 2.5em;
+    }
+
+    .content-overlay .tagline {
+        font-size: 1.2em;
+    }
+
+    .form-card {
+        /* Allow the card to be more responsive */
+        max-width: 90%; 
+        padding: 30px 20px;
+    }
+}
