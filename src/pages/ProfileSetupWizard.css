@@ -155,7 +155,7 @@
     cursor: pointer;
 }
 
-.unit-cm.active {
+.unit-cm.active ,.unit-ft.active{
     background-color: #007bff;
 }
 
