@@ -1,11 +1,11 @@
 // src/App.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 // Import your page components
 import AuthPage from "./pages/AuthPages.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
+import Dashboard from "./dashboard/Dashboard.jsx";
 import ProfileSetupWizard from "./pages/ProfileSetupWizard.jsx"; 
 // You'd also import WorkoutSession.jsx here when you build it
 
@@ -22,10 +22,10 @@ function App() {
         setIsAuthenticated(true);
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        setIsAuthenticated(false);
-    };
+    // const handleLogout = () => {
+    //     localStorage.removeItem('token');
+    //     setIsAuthenticated(false);
+    // };
     // Function to reset profile setup for testing
 
 
@@ -60,7 +60,7 @@ function App() {
                     path="/dashboard" 
                     element={
                         isAuthenticated 
-                            ? <Dashboard onLogout={handleLogout} /> 
+                            ? <Dashboard  /> 
                             : <Navigate to="/login" />
                     } 
                 />
