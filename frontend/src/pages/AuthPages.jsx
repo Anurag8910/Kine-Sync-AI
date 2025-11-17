@@ -34,7 +34,7 @@ const AuthPage = ({ onLoginSuccess }) => {
             // Always "succeed"
             localStorage.setItem('token', 'mock_token');
             if (onLoginSuccess) onLoginSuccess('mock_token');
-            navigate('/dashboard');
+            navigate('/setup-profile');
         }, 500);
     };
 
