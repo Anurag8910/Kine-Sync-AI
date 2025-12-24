@@ -4,9 +4,11 @@ import './index.css'
 import App from './App.jsx'
 import LandingPage from './LandingPage/LandingPage.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
+import ExerciseDashboard from './dashboard/ExerciseDashboard.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    {/* <App /> */}
+    <ExerciseDashboard/>
   </StrictMode>,
 )
