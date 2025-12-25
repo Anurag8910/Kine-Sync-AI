@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Play,Info,Video } from "lucide-react";
-import BicepDetector from "../model/BicepsDector";
+import PoseDetector from "../model/PoseDetector";
 
 //To add  new exersise, just copy one {block} and paste it here
 
@@ -97,12 +97,14 @@ const ExerciseDashboard = () => {
 
   const[activeExercise,setActiveExercise] = useState(null);
 
-  if(activeExercise == 'bicep_curls') {
-    return <BicepDetector onExit={() => setActiveExercise(null)}/>;
+  if(activeExercise) {
+    return <PoseDetector
+    exerciseId={activeExercise}
+     onExit={() => setActiveExercise(null)}/>;
   }
 
   const handleStart = (id) => {
-    if(id == 'bicep_curls') {
+    if(['bicep_curls','squats'].includes(id)) {
       setActiveExercise(id);
     }else {
       alert("Logic for this ecercise is coming soon!");
