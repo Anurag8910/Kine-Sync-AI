@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfileSetupWizard.css';
+import { useUser } from './UserContext.jsx';
 
 
 
@@ -160,6 +161,7 @@ const Step4 = ({ formData, updateFormData }) => (
 
 const ProfileSetupWizard = () => {
     const navigate = useNavigate();
+    const { userData } = useUser();
     // Step 0 = Welcome, Step 1-4 = Questions, Step 5 = Complete
     const [step, setStep] = useState(0);
     const [formData, setFormData] = useState({
@@ -172,7 +174,7 @@ const ProfileSetupWizard = () => {
         activityLevel: '',
     });
     const [isSaving, setIsSaving] = useState(false);
-    const userName = "Alex"; // Placeholder for the logged-in user's name
+    const userName = userData.auth.name// Placeholder for the logged-in user's name
 
     const updateFormData = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));

@@ -1,23 +1,32 @@
 import React from "react";
 
-const MacroProgressBar = ({label,consumed,goal,color}) => {
-    const percentage = goal > 0 ? (consumed / goal) * 100 : 0;
-    return(
-        <div className="w-full">
-            <div className="flex justify-between items-center mb-1">
-                <span className="text-sm text-gray-300">{label}</span>
-                <span className="text-sm font-medium text-gray-400">
-                    {consumed}g / {goal}g
-                </span>
-            </div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
-                <div
-                className={`${color} h-2 rounded-full`}
-                style={{width: `${percentage}%`}}
-                >
+const MacroProgressBar = ({ label, consumed, goal, color }) => {
+    
+    // 🎯 CRITICAL FIX: Ensure the percentage stops at 100%
+    const rawPercentage = (consumed / goal) * 100;
+    
+    // Use Math.min to cap the percentage at 100
+    const displayPercentage = Math.min(rawPercentage, 100);
 
-                </div>
+    return (
+        <div>
+            {/* ... label and text here ... */}
+            <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                {/* Apply the capped displayPercentage to the width style */}
+                <div 
+                    className={`h-full rounded-full ${color}`}
+                    style={{ width: `${displayPercentage}%` }} // <--- FIX IS APPLIED HERE
+                ></div>
             </div>
+            
+            {/* Display consumed/goal text (e.g., 300g / 220g) */}
+            <p className="text-xs text-white mt-1">
+                {consumed}g / {goal}g
+                {/* Optional: Add a subtle text warning if over the goal */}
+                {rawPercentage > 100 && (
+                    <span className="text-red-500 ml-2"> (Goal Exceeded!)</span>
+                )}
+            </p>
         </div>
     );
 };

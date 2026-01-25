@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfileSetupWizard.css';
+import { useUser } from './UserContext.jsx';
 
 const ProfileSetupWizard = ({ onLogout }) => {
     const navigate = useNavigate();
@@ -10,7 +11,8 @@ const ProfileSetupWizard = ({ onLogout }) => {
         age: '', gender: '', heightCm: '', currentWeightKg: '', mainGoal: '', activityLevel: '',
     });
     const [isSaving, setIsSaving] = useState(false);
-    const userName = "Alex"; // Placeholder for the logged-in user's name
+    const { userData } = useUser();
+    const userName = userData.auth.name; // Placeholder for the logged-in user's name
 
     const updateFormData = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
