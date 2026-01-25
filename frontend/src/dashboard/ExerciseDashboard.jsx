@@ -104,7 +104,7 @@ const ExerciseDashboard = () => {
   }
 
   const handleStart = (id) => {
-    if(['bicep_curls','squats','pushups'].includes(id)) {
+    if(['bicep_curls','squats','pushups','plank','lunges','glute_bridge'].includes(id)) {
       setActiveExercise(id);
     }else {
       alert("Logic for this ecercise is coming soon!");
