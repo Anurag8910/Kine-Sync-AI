@@ -145,5 +145,57 @@ export const EXERCISE_RULES = {
             
             return "Good Form";
         }
+    },
+    situps: {
+        id: "situps",
+        name: "Sit Ups",
+        countType: "flexion", // Count when body folds (angle gets SMALL)
+        joints: [11, 23, 25], // Shoulder, Hip, Knee
+        range: {
+            max: 150, // Lying flat (Down state)
+            min: 80   // Sitting up (Up state)
+        },
+        checkForm: (landmarks) => {
+            const shoulder = landmarks[11];
+            const hip = landmarks[23];
+            const knee = landmarks[25];
+
+            // 1. Check if they are actually lying down first (Hip Y should be close to Shoulder Y or below)
+            // Note: In visual coordinates, Y increases downwards.
+            
+            // 2. Simple Neck/Chin tuck check (Ear vs Shoulder)
+            // If the ear is too far ahead of the shoulder, they might be straining their neck.
+            const ear = landmarks[7];
+            if ((ear.x - shoulder.x) > 0.15) return "Don't pull your neck!";
+            
+            return "Good Form";
+        }
+    },
+    shoulder_press: {
+        id: "shoulder_press",
+        name: "Shoulder Press",
+        countType: "extension", // Count when arms straighten UP
+        joints: [11, 13, 15],   // Shoulder, Elbow, Wrist
+        range: {
+            max: 160, // Arms straight overhead
+            min: 90   // Arms bent at shoulders (Start position)
+        },
+        checkForm: (landmarks) => {
+            const nose = landmarks[0];
+            const shoulder = landmarks[11];
+            const elbow = landmarks[13];
+
+            // 1. Check if elbows are dropping too low
+            if (elbow.y > shoulder.y + 0.1) return "Elbows too low!";
+
+            // 2. Check if arms are uneven (using Y coordinate difference)
+            // (You could compare left vs right if tracking both sides)
+            
+            // 3. Posture check (Leaning back too much?)
+            // If nose X is behind shoulder X significantly
+            if (nose.x < shoulder.x - 0.1) return "Don't lean back!";
+
+            return "Good Form";
+        }
     }
 };

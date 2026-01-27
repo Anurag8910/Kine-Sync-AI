@@ -40,6 +40,18 @@ const EXERCISES = [
         title: 'Glute Bridge',
         description: 'Focus on hip extension',
         image: '/assets/GluteBridge.webp'
+    },
+    {
+        id: 'situps',
+        title: 'Sit Ups',
+        description: 'Core strength and stability',
+        image: '/assets/Situps.jpg' 
+    },
+    {
+        id: 'shoulder_press',
+        title: 'Shoulder Press',
+        description: 'Vertical push for shoulders',
+        image: '/assets/ShoulderPress.jpg'
     }
 ];
 
@@ -104,7 +116,7 @@ const ExerciseDashboard = () => {
   }
 
   const handleStart = (id) => {
-    if(['bicep_curls','squats','pushups','plank','lunges','glute_bridge'].includes(id)) {
+    if(['bicep_curls','squats','pushups','plank','lunges','glute_bridge','situps', 'shoulder_press'].includes(id)) {
       setActiveExercise(id);
     }else {
       alert("Logic for this ecercise is coming soon!");
