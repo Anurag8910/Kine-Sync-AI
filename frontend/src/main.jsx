@@ -8,7 +8,17 @@ import ExerciseDashboard from './dashboard/ExerciseDashboard.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+<<<<<<< HEAD
     <ExerciseDashboard/>
+=======
+
+    <ExerciseDashboard/>
+
+   
+    <App />
+    
+
+>>>>>>> 6754f62c3232bbbc9883dee52d10d8512eaeca94
 
   </StrictMode>,
 )
