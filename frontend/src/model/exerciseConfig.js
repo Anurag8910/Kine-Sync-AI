@@ -22,6 +22,16 @@ export const EXERCISE_RULES = {
             const elbow = landmarks[13];
             if (Math.abs(shoulder.x - elbow.x) > 0.12) return "Keep Elbow Tucked!";
             return "Good Form";
+        },
+        info: {
+            imageUrl: "/assets/biceps.jpg", // Uses your existing image
+            steps: [
+                "Camera Setup: Stand sideways so the camera has a clear profile view of your active arm.",
+                "Stand up straight with your feet shoulder-width apart and arms fully extended downwards.",
+                "Keep your elbows tucked in close to your torso. Do not let them swing forward or backward.",
+                "Curl the weight upward until your biceps are fully contracted and the weight is at shoulder level.",
+                "Slowly lower the weight back down to the starting position to complete one rep."
+            ]
         }
     },
     squats: {
@@ -46,6 +56,17 @@ export const EXERCISE_RULES = {
             if (hip.y < knee.y - 0.05) return "Go Lower!";
 
             return "Good Form";
+        },
+        info: {
+
+            imageUrl: "/assets/squat-guide.gif", 
+            steps: [
+                "Stand with feet shoulder-width apart, toes slightly out.",
+                "Keep your chest upright and look straight ahead.",
+                "Initiate movement by sending hips back, then bending knees.",
+                "Go down until thighs are parallel to the floor (or slightly below).",
+                "Drive back up through your heels to the starting position."
+            ]
         }
     },
     pushups: {
@@ -67,6 +88,16 @@ export const EXERCISE_RULES = {
             if(bodyAngle < 160) return "Fix back(Sagging)!";
             if(bodyAngle > 160) return "Fix Back (Too High)!";
             return "Good Form";
+        },
+        info: {
+            imageUrl: "/assets/PU.jpg", // You can use your existing image or a new GIF
+            steps: [
+                "Camera Setup: Place your device on the floor to capture your full side profile.",
+                "Start in a high plank position with your hands slightly wider than shoulder-width.",
+                "Keep your body in a straight line from your head to your heels (engage your core!).",
+                "Lower your body until your elbows are at a 90-degree angle.",
+                "Push back up to the starting position until your arms are fully extended."
+            ]
         }
     },
     plank: {
@@ -87,6 +118,16 @@ export const EXERCISE_RULES = {
             if(angle < 160) return "Lower Hips!";
             if(angle > 195) return "Lift Hips(Sagging)";
             return "Good Form"
+        },
+        info: {
+            imageUrl: "/assets/pla.jpg", // Uses your existing image
+            steps: [
+                "Camera Setup: Place your device on the floor so the AI can see your full side profile.",
+                "Rest your weight on your forearms and your toes, with elbows directly beneath your shoulders.",
+                "Form a perfectly straight line from your shoulders, through your hips, to your ankles.",
+                "Engage your core and squeeze your glutes. Do not let your hips sag or lift too high.",
+                "Hold steady! The AI timer will ONLY count up while your form is correct."
+            ]
         }
     },
     lunges: {
@@ -114,6 +155,16 @@ export const EXERCISE_RULES = {
             if (Math.abs(shoulder.x - hip.x) > 0.15) return "Keep torso upright!";
 
             return "Good Form";
+        },
+        info: {
+            imageUrl: "/assets/lung.jpg", // Uses your existing image
+            steps: [
+                "Camera Setup: Stand sideways to the camera. For the best AI tracking, place your Left Leg forward.",
+                "Start in a split stance with your torso perfectly upright and hands on your hips or by your side.",
+                "Lower your body by dropping your back knee straight down toward the floor.",
+                "Keep going until your front knee is bent at a 90-degree angle (do not let it pass your toes!).",
+                "Push through the heel of your front foot to return to the starting position."
+            ]
         }
     },
     glute_bridge: {
@@ -144,6 +195,16 @@ export const EXERCISE_RULES = {
             if (hip.y > knee.y) return "Lift Hips Higher!"; // Y increases downwards
             
             return "Good Form";
+        },
+        info: {
+            imageUrl: "/assets/GluteBridge.jpg", // Uses your existing image
+            steps: [
+                "Camera Setup: Place your device completely on the floor to capture a clear side profile of your body.",
+                "Lie flat on your back with your knees bent and feet flat on the floor, hip-width apart.",
+                "Keep your arms resting at your sides and your heels close enough to touch with your fingertips.",
+                "Squeeze your glutes and push through your heels to lift your hips toward the ceiling.",
+                "Hold at the top when your body forms a straight line from shoulders to knees to count the rep!"
+            ]
         }
     },
     situps: {
@@ -169,6 +230,16 @@ export const EXERCISE_RULES = {
             if ((ear.x - shoulder.x) > 0.15) return "Don't pull your neck!";
             
             return "Good Form";
+        },
+        info: {
+            imageUrl: "/assets/su.jpg", // Uses your existing image
+            steps: [
+                "Camera Setup: Place your device on the floor to capture a clear side profile of your body.",
+                "Lie flat on your back with your knees bent and feet firmly planted on the floor.",
+                "Cross your arms over your chest or place your hands lightly behind your ears (do not pull your neck!).",
+                "Engage your core to lift your upper body off the floor until your chest is near your thighs.",
+                "Lower yourself back down in a controlled motion until your shoulder blades touch the floor to complete the rep."
+            ]
         }
     },
     shoulder_press: {
@@ -196,6 +267,16 @@ export const EXERCISE_RULES = {
             if (nose.x < shoulder.x - 0.1) return "Don't lean back!";
 
             return "Good Form";
+        },
+        info: {
+            imageUrl: "/assets/SP.jpg", // Uses your existing image
+            steps: [
+                "Camera Setup: Stand sideways to the camera. Step far enough back so your hands remain in frame when fully extended upward!",
+                "Stand tall with your feet shoulder-width apart, holding the weights at shoulder level.",
+                "Brace your core and keep your back perfectly straight. Do not lean backward as you lift.",
+                "Press the weights straight up overhead until your arms are fully extended.",
+                "Slowly lower the weights back down to the starting position at your shoulders to count the rep."
+            ]
         }
     }
 };

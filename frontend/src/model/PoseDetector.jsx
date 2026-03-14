@@ -16,6 +16,8 @@ const PoseDetector = ({ exerciseId, onExit }) => {
   const [feedback, setFeedback] = useState("Position yourself");
   const [showSkeleton, setShowSkeleton] = useState(true); // <--- NEW TOGGLE STATE
 
+  
+
   // Refs for loop logic
   const counterRef = useRef(0);
   const stageRef = useRef("start");

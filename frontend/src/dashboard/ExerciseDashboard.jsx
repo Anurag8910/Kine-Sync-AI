@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Play,Info,Video } from "lucide-react";
+// 1. IMPORTED 'X' ICON
+import { Play, Info, Video, X } from "lucide-react";
 import PoseDetector from "../model/PoseDetector";
+// 2. IMPORT EXERCISE_RULES TO GET THE INSTRUCTIONS
+import { EXERCISE_RULES } from "../model/exerciseConfig"; 
 
 //To add  new exersise, just copy one {block} and paste it here
-
 const EXERCISES = [
     {
         id:'squats',
@@ -57,10 +59,9 @@ const EXERCISES = [
 
 const ExerciseCard = ({ exercise, onStart, onInfo }) => {
   return (
-    // Changed: bg-white -> bg-slate-900, added border-slate-800
     <div className="bg-slate-900 rounded-xl shadow-lg hover:shadow-blue-900/20 transition-all duration-300 overflow-hidden border border-slate-800 flex flex-col group">
       
-      {/* Image Section (Made Larger as requested previously: h-64) */}
+      {/* Image Section */}
       <div className="relative h-64 overflow-hidden bg-slate-800">
         <img 
           src={exercise.image} 
@@ -74,7 +75,6 @@ const ExerciseCard = ({ exercise, onStart, onInfo }) => {
 
       {/* Content Section */}
       <div className="p-5 flex-1 flex flex-col">
-        {/* Changed: Text colors to white/slate-400 */}
         <h3 className="text-xl font-bold text-white mb-1">{exercise.title}</h3>
         <p className="text-slate-400 text-sm mb-6">{exercise.description}</p>
         
@@ -90,7 +90,6 @@ const ExerciseCard = ({ exercise, onStart, onInfo }) => {
           
           <button 
             onClick={() => onInfo(exercise.id)}
-            // Changed: Outline button styled for dark mode
             className="flex-1 bg-transparent border border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white py-2.5 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
           >
             <Info size={18} />
@@ -103,11 +102,14 @@ const ExerciseCard = ({ exercise, onStart, onInfo }) => {
 };
 
 // ==========================================
-// 4. MAIN PAGE COMPONENT (Dark Theme)
+// MAIN PAGE COMPONENT
 // ==========================================
 const ExerciseDashboard = () => {
 
   const[activeExercise,setActiveExercise] = useState(null);
+  
+  // 3. NEW STATE FOR MODAL ID
+  const [infoModalId, setInfoModalId] = useState(null);
 
   if(activeExercise) {
     return <PoseDetector
@@ -118,33 +120,34 @@ const ExerciseDashboard = () => {
   const handleStart = (id) => {
     if(['bicep_curls','squats','pushups','plank','lunges','glute_bridge','situps', 'shoulder_press'].includes(id)) {
       setActiveExercise(id);
-    }else {
-      alert("Logic for this ecercise is coming soon!");
+    } else {
+      alert("Logic for this exercise is coming soon!");
     }
   };
 
   const handleInfo = (id) => {
-    alert(`Show instructions modal for ${id}`);
+    // 4. REPLACED ALERT WITH SET STATE
+    setInfoModalId(id);
   };
 
+  // 5. GET CONFIG FOR THE OPEN MODAL
+  const activeConfig = infoModalId ? EXERCISE_RULES[infoModalId] : null;
+
   return (
-    // Changed: bg-slate-50 -> bg-slate-950 (The dark background)
-    <div className="min-h-screen bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-950 py-12 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="mb-10">
-          {/* Changed: text-gray-900 -> text-white */}
           <h1 className="text-4xl font-extrabold text-white tracking-tight">
             AI Form Correction
           </h1>
-          {/* Changed: text-gray-600 -> text-slate-400 */}
           <p className="mt-2 text-lg text-slate-400">
             Select an exercise below to begin real-time analysis and feedback.
           </p>
         </div>
 
-        {/* The Grid (Kept wide: lg:grid-cols-2) */}
+        {/* The Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {EXERCISES.map((exercise) => (
             <ExerciseCard 
@@ -157,8 +160,91 @@ const ExerciseDashboard = () => {
         </div>
 
       </div>
+
+      {/* ========================================= */}
+      {/* 6. INFO MODAL POPUP OVERLAY */}
+      {/* ========================================= */}
+      {activeConfig && (
+        <div 
+          className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          onClick={() => setInfoModalId(null)} // Close when clicking outside
+        >
+          <div 
+            className="bg-slate-900 border border-slate-700 rounded-3xl p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
+            onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
+          >
+            {/* CLOSE BUTTON */}
+            <button 
+                onClick={() => setInfoModalId(null)}
+                className="absolute top-5 right-5 text-slate-500 hover:text-white bg-slate-800 p-1.5 rounded-full transition-colors"
+            >
+                <X size={20} />
+            </button>
+
+            {/* HEADER */}
+            <div className="flex items-center gap-3 mb-6">
+                <div className="bg-blue-950 p-3 rounded-xl border border-blue-800 text-blue-400">
+                    <Info size={24}/>
+                </div>
+                <h3 className="text-3xl font-extrabold text-white">How to {activeConfig.name}</h3>
+            </div>
+
+            {/* IMAGE (If it exists in config) */}
+            {activeConfig.info?.imageUrl && (
+                <div className="border-4 border-slate-800 rounded-2xl overflow-hidden mb-6 bg-black">
+                    <img 
+                        src={activeConfig.info.imageUrl} 
+                        alt={`${activeConfig.name} form guide`}
+                        className="w-full h-auto object-contain"
+                    />
+                </div>
+            )}
+
+            {/* STEPS */}
+            {activeConfig.info?.steps ? (
+                <div className="space-y-4">
+                    <h4 className="text-lg font-bold text-slate-300 uppercase tracking-wider">Key Steps</h4>
+                    <ol className="space-y-3">
+                        {activeConfig.info.steps.map((step, index) => (
+                            <li key={index} className="flex items-start gap-4 bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+                                <span className="flex items-center justify-center bg-blue-500 text-white font-bold rounded-full w-7 h-7 mt-0.5 flex-shrink-0 text-sm">
+                                    {index + 1}
+                                </span>
+                                <p className="text-slate-200 leading-relaxed">{step}</p>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            ) : (
+                <div className="text-center py-8">
+                    <p className="text-slate-400">Detailed instructions coming soon for this exercise!</p>
+                </div>
+            )}
+            
+            {/* START WORKOUT DIRECTLY FROM MODAL */}
+            <div className="mt-8 flex gap-3">
+              <button 
+                  onClick={() => setInfoModalId(null)}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold transition-colors"
+              >
+                  Close
+              </button>
+              <button 
+                  onClick={() => {
+                      setInfoModalId(null); // Close modal first
+                      handleStart(activeConfig.id); // Then start the camera
+                  }}
+                  className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-colors flex justify-center items-center gap-2"
+              >
+                  <Play size={20} fill="currentColor" /> Start Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
 
-export default ExerciseDashboard
+export default ExerciseDashboard;
