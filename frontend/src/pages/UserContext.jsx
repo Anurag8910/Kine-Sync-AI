@@ -1,59 +1,270 @@
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-// --- CONSTANTS AND INITIAL STATE ---
-const LOCAL_STORAGE_KEY = 'kineSyncAiUserData'; 
-
-const INITIAL_USER_STATE = { 
-    auth: { name: '', email: '', isAuthenticated: false },
-    profile: { age: '', gender: '', heightCm: '', currentWeightKg: '', mainGoal: '', activityLevel: '' },
-    metrics: { targetCalories: 0, BMR: 0, targetSleepHours: 8, targetGlasses: 8 }, // ✅ Added targetGlasses for water goal
+// --- INITIAL STATE ---
+const INITIAL_USER_STATE = {
+  auth: { name: '', email: '', isAuthenticated: false },
+  profile: { age: '', gender: '', heightCm: '', currentWeightKg: '', mainGoal: '', activityLevel: '' },
+  metrics: { targetCalories: 0, BMR: 0, targetSleepHours: 8, targetGlasses: 8 },
 };
 
 export const UserContext = createContext(INITIAL_USER_STATE);
 
-// Function to load data from localStorage
-const loadInitialState = () => {
-    try {
-        const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            
-            return {
-                userData: parsedData.userData || INITIAL_USER_STATE,
-                dailyLogs: parsedData.dailyLogs || [],
-                trainingLogs: parsedData.trainingLogs || [], 
-                sleepLogs: parsedData.sleepLogs || [],
-                waterLogs: parsedData.waterLogs || [],
-                weightHistory: parsedData.weightHistory || [], 
-                bfpLogs: parsedData.bfpLogs || [],
-            };
-        }
-    } catch (error) {
-        console.error("Error loading state from localStorage:", error);
-    }
-    return {
-        userData: INITIAL_USER_STATE,
-        dailyLogs: [],
-        trainingLogs: [], 
-        sleepLogs: [], 
-        weightHistory: [], 
-        bfpLogs: [],
-        waterLogs:[],
-    };
-};
 
 
 export const UserProvider = ({ children }) => {
-    const initialState = loadInitialState();
-    
-    // State definitions
-    const [userData, setUserData] = useState(initialState.userData);
-    const [dailyLogs, setDailyLogs] = useState(initialState.dailyLogs);
-    const [trainingLogs, setTrainingLogs] = useState(initialState.trainingLogs); 
-    const [sleepLogs, setSleepLogs] = useState(initialState.sleepLogs);
-    const [waterLogs, setWaterLogs] = useState(initialState.waterLogs || []);
-    const [bfpLogs, setBfpLogs] = useState(initialState.bfpLogs); 
-    const [weightHistory, setWeightHistory] = useState(initialState.weightHistory);
+    // JWT token state
+    const [token, setToken] = useState(null);
+    // User and logs state
+    const [userData, setUserData] = useState(INITIAL_USER_STATE);
+    const [dailyLogs, setDailyLogs] = useState([]);
+    const [trainingLogs, setTrainingLogs] = useState([]);
+    const [sleepLogs, setSleepLogs] = useState([]);
+    const [waterLogs, setWaterLogs] = useState([]);
+    const [bfpLogs, setBfpLogs] = useState([]);
+    const [weightHistory, setWeightHistory] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // API base URL
+    const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+    // Helper: Auth header
+    const authHeader = () => token ? { Authorization: `Bearer ${token}` } : {};
+
+    // --- AUTH ---
+    const login = async (email, password) => {
+        setLoading(true); setError(null);
+        try {
+            const res = await fetch(`${API_BASE}/users/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (data.success && data.data.token) {
+                setToken(data.data.token);
+                setUserData(u => ({ ...u, auth: { ...data.data.user, isAuthenticated: true } }));
+                await fetchUserData(data.data.token);
+            } else {
+                setError(data.message || 'Login failed');
+            }
+        } catch (e) {
+            setError('Network error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const signup = async (name, email, password) => {
+        setLoading(true); setError(null);
+        try {
+            const res = await fetch(`${API_BASE}/users/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                // Optionally auto-login after signup
+                await login(email, password);
+            } else {
+                setError(data.message || 'Signup failed');
+            }
+        } catch (e) {
+            setError('Network error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const logout = () => {
+        setToken(null);
+        setUserData(INITIAL_USER_STATE);
+        setDailyLogs([]);
+        setTrainingLogs([]);
+        setSleepLogs([]);
+        setWaterLogs([]);
+        setBfpLogs([]);
+        setWeightHistory([]);
+    };
+
+    // --- FETCH USER DATA ---
+    const fetchUserData = async (overrideToken) => {
+        setLoading(true); setError(null);
+        try {
+            const res = await fetch(`${API_BASE}/users/me`, {
+                headers: { ...authHeader(), ...(overrideToken ? { Authorization: `Bearer ${overrideToken}` } : {}) }
+            });
+            const data = await res.json();
+            if (data.success && data.data) {
+                setUserData(u => ({
+                    ...u,
+                    auth: { name: data.data.name, email: data.data.email, isAuthenticated: true },
+                    profile: data.data.profile || INITIAL_USER_STATE.profile,
+                    metrics: data.data.metrics || INITIAL_USER_STATE.metrics,
+                }));
+            }
+        } catch (e) {
+            setError('Failed to fetch user');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // --- FETCH DASHBOARD LOGS ---
+    const fetchDashboardLogs = async () => {
+        setLoading(true); setError(null);
+        try {
+            const res = await fetch(`${API_BASE}/logs/dashboard`, { headers: authHeader() });
+            const data = await res.json();
+            if (data.success && data.data) {
+                setDailyLogs(data.data.dailyLogs || []);
+                setTrainingLogs(data.data.trainingLogs || []);
+                setSleepLogs(data.data.sleepLogs || []);
+                setWaterLogs(data.data.waterLogs || []);
+                setBfpLogs(data.data.bfpLogs || []);
+                setWeightHistory(data.data.weightLogs || []);
+            }
+        } catch (e) {
+            setError('Failed to fetch logs');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // --- LOG/PROFILE UPDATES ---
+    const updateUserData = async (section, newData) => {
+        if (section === 'profile') {
+            setLoading(true); setError(null);
+            try {
+                const res = await fetch(`${API_BASE}/users/profile`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', ...authHeader() },
+                    body: JSON.stringify(newData)
+                });
+                const data = await res.json();
+                if (data.success && data.data) {
+                    setUserData(u => ({ ...u, profile: data.data }));
+                } else {
+                    setError(data.message || 'Profile update failed');
+                }
+            } catch (e) {
+                setError('Network error');
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    // --- LOG ADDERS ---
+    const addDailyLog = async (logEntry) => {
+        try {
+            const res = await fetch(`${API_BASE}/logs/daily`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify(logEntry)
+            });
+            const data = await res.json();
+            if (data.success && data.data) setDailyLogs(prev => [...prev, data.data]);
+        } catch {}
+    };
+    const addTrainingLog = async (logEntry) => {
+        try {
+            const res = await fetch(`${API_BASE}/logs/training`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify(logEntry)
+            });
+            const data = await res.json();
+            if (data.success && data.data) setTrainingLogs(prev => [...prev, data.data]);
+        } catch {}
+    };
+    const addSleepLog = async (logEntry) => {
+        try {
+            const res = await fetch(`${API_BASE}/logs/sleep`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify(logEntry)
+            });
+            const data = await res.json();
+            if (data.success && data.data) setSleepLogs(prev => [...prev, data.data]);
+        } catch {}
+    };
+    const addWaterLog = async (logEntry) => {
+        try {
+            const res = await fetch(`${API_BASE}/logs/water`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify(logEntry)
+            });
+            const data = await res.json();
+            if (data.success && data.data) setWaterLogs(prev => [...prev, data.data]);
+        } catch {}
+    };
+    const addWeightLog = async (logEntry) => {
+        try {
+            const res = await fetch(`${API_BASE}/logs/weight`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify(logEntry)
+            });
+            const data = await res.json();
+            if (data.success && data.data) setWeightHistory(prev => [...prev, data.data]);
+        } catch {}
+    };
+    const addBFPLog = async (logEntry) => {
+        try {
+            const res = await fetch(`${API_BASE}/logs/bfp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeader() },
+                body: JSON.stringify(logEntry)
+            });
+            const data = await res.json();
+            if (data.success && data.data) setBfpLogs(prev => [...prev, data.data]);
+        } catch {}
+    };
+
+    // --- EFFECT: Fetch user and logs on token change ---
+    useEffect(() => {
+        if (token) {
+            fetchUserData();
+            fetchDashboardLogs();
+        }
+    }, [token]);
+
+    // --- CONTEXT VALUE ---
+    const contextValue = {
+        userData,
+        token,
+        loading,
+        error,
+        login,
+        signup,
+        logout,
+        updateUserData,
+        addDailyLog,
+        addTrainingLog,
+        addSleepLog,
+        addWaterLog,
+        addWeightLog,
+        addBFPLog,
+        dailyLogs,
+        trainingLogs,
+        sleepLogs,
+        waterLogs,
+        bfpLogs,
+        weightHistory,
+        fetchDashboardLogs,
+        isLoggedIn: !!token,
+    };
+
+    return (
+        <UserContext.Provider value={contextValue}>
+            {children}
+        </UserContext.Provider>
+    );
+};
 
     // -----------------------------------------------------------------------
     // Core Profile Management & Macros
@@ -370,7 +581,6 @@ export const UserProvider = ({ children }) => {
             {children}
         </UserContext.Provider>
     );
-};
 
 export const useUser = () => {
     const context = useContext(UserContext);
