@@ -1,100 +1,166 @@
 // src/App.jsx
 
-import React, { useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
-// Assuming you use the useUser hook from context to check profile setup status
-// import { useUser } from './pages/UserContext'; 
 
-// Import your page components
 import AuthPage from "./pages/AuthPages.jsx";
-// import Details from "./pages/Dashboard.jsx"; // ⚠️ REMOVED: Use only one Dashboard component
-import { UserProvider } from './pages/UserContext';
-import Dashboard from "./dashboard/Dashboard.jsx"; // Assuming this is your main dashboard
+import { UserProvider, useUser } from "./pages/UserContext";
+import Dashboard from "./dashboard/Dashboard.jsx";
 import ProfileSetupWizard from "./pages/ProfileSetupWizard.jsx";
 import LandingPage from "./LandingPage/LandingPage.jsx";
-import DailyCheckInForm from './pages/DailyCheckInForm';
-import BodyFatCalculatorForm from './pages/BodyFatCalculatorForm';
-import WeightInputForm from './pages/WeightInputForm.jsx';
+import DailyCheckInForm from "./pages/DailyCheckInForm";
+import BodyFatCalculatorForm from "./pages/BodyFatCalculatorForm";
+import WeightInputForm from "./pages/WeightInputForm.jsx";
+import ExerciseDashboard from "./dashboard/ExerciseDashboard.jsx";
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token")
+function AppRoutes() {
+  const { userData, isLoggedIn, loading } = useUser();
+  const location = useLocation();
+
+  // Profile is considered complete if all required fields are filled
+  const profile = userData?.profile || {};
+  const profileComplete = Boolean(
+    profile.age && profile.gender && profile.heightCm && profile.currentWeightKg && profile.mainGoal && profile.activityLevel
   );
 
-  const handleLogin = (token) => {
-    localStorage.setItem("token", token);
-    setIsAuthenticated(true);
-  };
+  // Show nothing while loading
+  if (loading) return null;
 
-  // 🎯 FIX 4: Implemented handleLogout
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
-    // You might also need to clear user data from context here
-  };
+  return (
+    <Routes>
+      {/* Landing Page */}
+      <Route
+        path="/"
+        element={
+          !isLoggedIn ? (
+            <LandingPage />
+          ) : !profileComplete ? (
+            <Navigate to="/setup-profile" state={{ from: location }} replace />
+          ) : (
+            <Navigate to="/dashboard" state={{ from: location }} replace />
+          )
+        }
+      />
 
-  // NOTE: A real app would check if the profile is setup inside a custom hook or Context, 
-  // but for routing purposes, we'll focus on the isAuthenticated flag.
 
+      {/* Login */}
+      <Route
+        path="/login"
+        element={
+          !isLoggedIn ? (
+            <AuthPage />
+          ) : !profileComplete ? (
+            <Navigate to="/setup-profile" state={{ from: location }} replace />
+          ) : (
+            <Navigate to="/dashboard" state={{ from: location }} replace />
+          )
+        }
+      />
+
+      {/* Signup */}
+      <Route
+        path="/signup"
+        element={
+          !isLoggedIn ? (
+            <AuthPage />
+          ) : !profileComplete ? (
+            <Navigate to="/setup-profile" state={{ from: location }} replace />
+          ) : (
+            <Navigate to="/dashboard" state={{ from: location }} replace />
+          )
+        }
+      />
+
+      {/* Setup Profile */}
+      <Route
+        path="/setup-profile"
+        element={
+          isLoggedIn ? (
+            profileComplete ? (
+              <Navigate to="/dashboard" state={{ from: location }} replace />
+            ) : (
+              <ProfileSetupWizard />
+            )
+          ) : (
+            <Navigate to="/login" state={{ from: location }} replace />
+          )
+        }
+      />
+
+      {/* Dashboard */}
+      <Route
+        path="/dashboard"
+        element={
+          isLoggedIn ? (
+            profileComplete ? (
+              <Dashboard />
+            ) : (
+              <Navigate to="/setup-profile" state={{ from: location }} replace />
+            )
+          ) : (
+            <Navigate to="/login" state={{ from: location }} replace />
+          )
+        }
+      />
+
+      {/* Other Protected Routes */}
+      <Route
+        path="/daily-checkin"
+        element={
+          isLoggedIn && profileComplete ? (
+            <DailyCheckInForm />
+          ) : (
+            <Navigate to={isLoggedIn ? "/setup-profile" : "/login"} state={{ from: location }} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/calculate-bfp"
+        element={
+          isLoggedIn && profileComplete ? (
+            <BodyFatCalculatorForm />
+          ) : (
+            <Navigate to={isLoggedIn ? "/setup-profile" : "/login"} state={{ from: location }} replace />
+          )
+        }
+      />
+
+      <Route
+        path="/log-weight"
+        element={
+          isLoggedIn && profileComplete ? (
+            <WeightInputForm />
+          ) : (
+            <Navigate to={isLoggedIn ? "/setup-profile" : "/login"} state={{ from: location }} replace />
+          )
+        }
+      />
+      <Route path="/exercise-dashboard"
+        element={
+          isLoggedIn  ?
+            <ExerciseDashboard />
+          : <Navigate to="/login"/>
+        }
+      />
+
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+function App() {
   return (
     <UserProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          
-          {/* Public Routes (Login/Signup) */}
-          <Route
-            path="/login"
-            element={
-              isAuthenticated ? (
-                // 🎯 FIX 2: Should navigate to Dashboard if setup is complete
-                <Navigate to="/dashboard" /> 
-              ) : (
-                <AuthPage onLoginSuccess={handleLogin} />
-              )
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              isAuthenticated ? (
-                <Navigate to="/dashboard" /> 
-              ) : (
-                <AuthPage onLoginSuccess={handleLogin} />
-              )
-            }
-          />
-
-          {/* Protected Routes */}
-          <Route
-            path="/setup-profile"
-            element={
-              isAuthenticated ? <ProfileSetupWizard onLogout={handleLogout} /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={isAuthenticated ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />}
-          />
-          
-          {/* 🎯 FIX 1: Protecting the Daily Check-in Route */}
-          <Route 
-            path="/daily-checkin" 
-            element={
-              isAuthenticated ? <DailyCheckInForm /> : <Navigate to="/login" />
-            }
-          />
-          <Route path="/calculate-bfp" element={<BodyFatCalculatorForm />} />
-          <Route path="/log-weight" element={<WeightInputForm />} />
-
-          {/* Add a catch-all redirect for any undefined routes */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        <AppRoutes />
       </Router>
     </UserProvider>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // 1. IMPORTED 'X' ICON
 import { Play, Info, Video, X } from "lucide-react";
 import PoseDetector from "../model/PoseDetector";
@@ -106,10 +107,11 @@ const ExerciseCard = ({ exercise, onStart, onInfo }) => {
 // ==========================================
 const ExerciseDashboard = () => {
 
-  const[activeExercise,setActiveExercise] = useState(null);
-  
+
+  const [activeExercise, setActiveExercise] = useState(null);
   // 3. NEW STATE FOR MODAL ID
   const [infoModalId, setInfoModalId] = useState(null);
+  const navigate = useNavigate();
 
   if(activeExercise) {
     return <PoseDetector
@@ -136,15 +138,22 @@ const ExerciseDashboard = () => {
   return (
     <div className="min-h-screen bg-slate-950 py-12 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto">
-        
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-white tracking-tight">
-            AI Form Correction
-          </h1>
-          <p className="mt-2 text-lg text-slate-400">
-            Select an exercise below to begin real-time analysis and feedback.
-          </p>
+        <div className="mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-extrabold text-white tracking-tight">
+              AI Form Correction
+            </h1>
+            <p className="mt-2 text-lg text-slate-400">
+              Select an exercise below to begin real-time analysis and feedback.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow"
+          >
+            ← Back to Dashboard
+          </button>
         </div>
 
         {/* The Grid */}
@@ -158,7 +167,6 @@ const ExerciseDashboard = () => {
             />
           ))}
         </div>
-
       </div>
 
       {/* ========================================= */}
@@ -207,7 +215,7 @@ const ExerciseDashboard = () => {
                     <ol className="space-y-3">
                         {activeConfig.info.steps.map((step, index) => (
                             <li key={index} className="flex items-start gap-4 bg-slate-950/50 p-4 rounded-xl border border-slate-800">
-                                <span className="flex items-center justify-center bg-blue-500 text-white font-bold rounded-full w-7 h-7 mt-0.5 flex-shrink-0 text-sm">
+                                <span className="flex items-center justify-center bg-blue-500 text-white font-bold rounded-full w-7 h-7 mt-0.5 shrink-0 text-sm">
                                     {index + 1}
                                 </span>
                                 <p className="text-slate-200 leading-relaxed">{step}</p>

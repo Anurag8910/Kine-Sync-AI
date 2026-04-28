@@ -1,0 +1,82 @@
+/* Scope everything under .landing-page */
+
+.landing-page {
+  --bg-base:    #080B12;
+  --bg-card:    #0E1420;
+  --bg-card2:   #111827;
+  --accent:     #3B82F6;
+  --accent-dim: rgba(59,130,246,0.12);
+  --accent-glow:rgba(59,130,246,0.35);
+  --text-hi:    #F1F5F9;
+  --text-mid:   #94A3B8;
+  --text-lo:    #475569;
+  --border:     rgba(255,255,255,0.07);
+  --border-hi:  rgba(59,130,246,0.3);
+  font-family: 'Barlow', sans-serif;
+}
+
+/* REMOVE global * and body styles ❌ */
+
+/* ── Card ── */
+.landing-page .card-bg {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.landing-page .card-bg:hover {
+  border-color: var(--border-hi);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px var(--border-hi);
+}
+
+/* ── Glow ── */
+.landing-page .blue-glow {
+  box-shadow: 0 0 60px rgba(59,130,246,0.2),
+              0 0 120px rgba(59,130,246,0.08);
+}
+
+/* ── Gradient Text ── */
+.landing-page .hero-text-gradient {
+  background: linear-gradient(135deg, #F1F5F9 30%, #60A5FA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Section Label ── */
+.landing-page .section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(59,130,246,0.25);
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+/* ── Animation ── */
+@keyframes landingFadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.landing-page .animate-fade-in-up {
+  opacity: 0;
+  animation: landingFadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+/* ── Optional noise overlay (scoped) ── */
+.landing-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg ... %3E");
+}

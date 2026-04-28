@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfileSetupWizard.css';
 import { useUser } from './UserContext.jsx';
 
-
-
+/* ================= STEP 1 ================= */
 const Step1 = ({ formData, updateFormData }) => (
     <div className="step-card">
         <div className="form-field">
@@ -17,6 +16,7 @@ const Step1 = ({ formData, updateFormData }) => (
                 required
             />
         </div>
+
         <div className="form-field">
             <label>Gender</label>
             <div className="choice-group">
@@ -27,9 +27,11 @@ const Step1 = ({ formData, updateFormData }) => (
                         onClick={() => updateFormData('gender', g)}
                         role="button"
                         tabIndex={0}
-                        onKeyPress={(e) => { if (e.key === 'Enter') updateFormData('gender', g); }}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') updateFormData('gender', g);
+                        }}
                     >
-                        <i className="fas fa-user"></i>{g}
+                        <i className="fas fa-user"></i> {g}
                     </div>
                 ))}
             </div>
@@ -37,35 +39,34 @@ const Step1 = ({ formData, updateFormData }) => (
     </div>
 );
 
+/* ================= STEP 2 ================= */
 const Step2 = ({ formData, updateFormData }) => {
-
     const unit = formData.heightUnit || 'cm';
 
     const displayHeight = () => {
-        if (formData.heightCm === '' || formData.heightCm === null || formData.heightCm === undefined) return '';
+        if (!formData.heightCm) return '';
         if (unit === 'cm') return formData.heightCm;
-        // convert cm -> ft (decimal)
+
         const ft = Number(formData.heightCm) / 30.48;
         return Number.isNaN(ft) ? '' : ft.toFixed(2);
     };
 
     const handleHeightChange = (e) => {
         const val = e.target.value;
+
         if (val === '') {
             updateFormData('heightCm', '');
             return;
         }
+
         if (unit === 'cm') {
-            // store raw cm (allow numeric string)
             updateFormData('heightCm', val);
         } else {
-            // user typed feet; convert to cm and store
             const ftNum = parseFloat(val);
             if (Number.isNaN(ftNum)) {
                 updateFormData('heightCm', '');
             } else {
-                const cm = (ftNum * 30.48).toFixed(2);
-                updateFormData('heightCm', cm);
+                updateFormData('heightCm', (ftNum * 30.48).toFixed(2));
             }
         }
     };
@@ -77,35 +78,29 @@ const Step2 = ({ formData, updateFormData }) => {
                 <div className="input-with-units">
                     <input
                         type="number"
-                        placeholder={unit === 'cm' ? "Enter height in cm" : "Enter height in ft (decimal)"}
+                        placeholder={unit === 'cm' ? 'Enter height in cm' : 'Enter height in ft'}
                         value={displayHeight()}
                         onChange={handleHeightChange}
                         required
-                        step={unit === 'cm' ? "1" : "0.01"}
+                        step={unit === 'cm' ? '1' : '0.01'}
                     />
                     <span
                         className={`unit-cm ${unit === 'cm' ? 'active' : ''}`}
                         onClick={() => updateFormData('heightUnit', 'cm')}
-                        role="button"
-                        tabIndex={0}
-                        onKeyPress={(e) => { if (e.key === 'Enter') updateFormData('heightUnit', 'cm'); }}
                     >
                         cm
                     </span>
                     <span
                         className={`unit-ft ${unit === 'ft' ? 'active' : ''}`}
                         onClick={() => updateFormData('heightUnit', 'ft')}
-                        role="button"
-                        tabIndex={0}
-                        onKeyPress={(e) => { if (e.key === 'Enter') updateFormData('heightUnit', 'ft'); }}
                     >
                         ft
                     </span>
                 </div>
-                <small className="help-text">Switch between cm and ft.</small>
             </div>
+
             <div className="form-field">
-                <label>Current Weight (kg)</label>
+                <label>Weight (kg)</label>
                 <input
                     type="number"
                     placeholder="Enter your weight"
@@ -118,6 +113,7 @@ const Step2 = ({ formData, updateFormData }) => {
     );
 };
 
+/* ================= STEP 3 ================= */
 const Step3 = ({ formData, updateFormData }) => (
     <div className="step-card goal-selection">
         {['Lose Weight', 'Gain Muscle', 'Maintain Fitness'].map(goal => (
@@ -127,7 +123,9 @@ const Step3 = ({ formData, updateFormData }) => (
                 onClick={() => updateFormData('mainGoal', goal)}
                 role="button"
                 tabIndex={0}
-                onKeyPress={(e) => { if (e.key === 'Enter') updateFormData('mainGoal', goal); }}
+                onKeyPress={(e) => {
+                    if (e.key === 'Enter') updateFormData('mainGoal', goal);
+                }}
             >
                 <i className="fas fa-heartbeat"></i>
                 <span>{goal}</span>
@@ -136,6 +134,7 @@ const Step3 = ({ formData, updateFormData }) => (
     </div>
 );
 
+/* ================= STEP 4 ================= */
 const Step4 = ({ formData, updateFormData }) => (
     <div className="step-card activity-selection">
         {[
@@ -150,7 +149,9 @@ const Step4 = ({ formData, updateFormData }) => (
                 onClick={() => updateFormData('activityLevel', level)}
                 role="button"
                 tabIndex={0}
-                onKeyPress={(e) => { if (e.key === 'Enter') updateFormData('activityLevel', level); }}
+                onKeyPress={(e) => {
+                    if (e.key === 'Enter') updateFormData('activityLevel', level);
+                }}
             >
                 <h3>{level}</h3>
                 <p>{desc}</p>
@@ -159,76 +160,105 @@ const Step4 = ({ formData, updateFormData }) => (
     </div>
 );
 
-const ProfileSetupWizard = () => {
-    const navigate = useNavigate();
-    const { userData } = useUser();
-    // Step 0 = Welcome, Step 1-4 = Questions, Step 5 = Complete
+/* ================= MAIN COMPONENT ================= */
+const ProfileSetupWizard = ({ onProfileComplete, onLogout }) => {
     const [step, setStep] = useState(0);
+    const navigate = useNavigate();
+    const { userData, updateUserData, error } = useUser();
+
     const [formData, setFormData] = useState({
         age: '',
         gender: '',
         heightCm: '',
-        heightUnit: 'cm', // new: stores which unit to display/edit
+        heightUnit: 'cm',
         currentWeightKg: '',
         mainGoal: '',
         activityLevel: '',
     });
+
     const [isSaving, setIsSaving] = useState(false);
-    const userName = userData.auth.name// Placeholder for the logged-in user's name
+    const [saveError, setSaveError] = useState(null);
+
+    const userName = userData?.auth?.name || 'there';
+
+    /* Redirect after completion */
+    useEffect(() => {
+        if (step === 5) {
+            const timer = setTimeout(() => {
+                navigate('/dashboard');
+            }, 1200);
+            return () => clearTimeout(timer);
+        }
+    }, [step, navigate]);
 
     const updateFormData = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleNext = () => {
-        if (step < 4) {
-            setStep(step + 1);
-        } else if (step === 4) {
-            setIsSaving(true);
-            console.log("Profile Data Submitted:", formData);
+    const handleNext = async () => {
+        if (step === 1 && (!formData.age || !formData.gender)) {
+            setSaveError('Please fill in all fields.');
+            return;
+        }
 
-            // Simulate API latency before showing the completion screen
-            setTimeout(() => {
+        if (step === 2 && (!formData.heightCm || !formData.currentWeightKg)) {
+            setSaveError('Please fill in all fields.');
+            return;
+        }
+
+        if (step === 3 && !formData.mainGoal) {
+            setSaveError('Please select a goal.');
+            return;
+        }
+
+        if (step === 4 && !formData.activityLevel) {
+            setSaveError('Please select an activity level.');
+            return;
+        }
+
+        setSaveError(null);
+
+        if (step < 4) {
+            setStep(prev => prev + 1);
+        } else {
+            try {
+                setIsSaving(true);
+
+                await updateUserData('profile', {
+                    age: Number(formData.age),
+                    gender: formData.gender,
+                    heightCm: Number(formData.heightCm),
+                    currentWeightKg: Number(formData.currentWeightKg),
+                    mainGoal: formData.mainGoal,
+                    activityLevel: formData.activityLevel,
+                });
+
+                setStep(5);
+                onProfileComplete?.();
+            } catch {
+                setSaveError('Failed to save profile. Please try again.');
+            } finally {
                 setIsSaving(false);
-                setStep(5); // Move to the "You're All Set!" screen
-            }, 1000); // 1-second delay
+            }
         }
     };
 
     const handleBack = () => {
-        setStep(step > 0 ? step - 1 : 0);
-    };
-
-    const handleResetForTesting = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('profileSetupFinished');
-        setFormData({
-            age: '',
-            gender: '',
-            heightCm: '',
-            heightUnit: 'cm',
-            currentWeightKg: '',
-            mainGoal: '',
-            activityLevel: '',
-        });
-        setStep(0);
-        navigate('/login');
+        setStep(prev => Math.max(prev - 1, 0));
     };
 
     const stepsMap = {
         1: { title: 'Tell Us About Yourself', Component: Step1 },
-        2: { title: 'What Are Your Current Stats?', Component: Step2 },
-        3: { title: "What's Your Main Fitness Goal?", Component: Step3 },
-        4: { title: 'How Active Are You on a Weekly Basis?', Component: Step4 },
+        2: { title: 'Your Stats', Component: Step2 },
+        3: { title: 'Your Goal', Component: Step3 },
+        4: { title: 'Activity Level', Component: Step4 },
     };
 
     if (step === 0) {
         return (
             <div className="setup-container welcome-screen">
-                <div className="icon-circle"><i className="fas fa-user-circle"></i></div>
                 <h1>Welcome, {userName}!</h1>
-                <p className="subtitle">Let's quickly set up your profile to create your personalized fitness journey. It will only take a moment.</p>
-                <button className="primary-button" onClick={() => setStep(1)}>Let's Go →</button>
+                <button onClick={() => setStep(1)}>Let's Go →</button>
             </div>
         );
     }
@@ -236,13 +266,8 @@ const ProfileSetupWizard = () => {
     if (step === 5) {
         return (
             <div className="setup-container complete-screen">
-                <div className="icon-circle check-icon"><i className="fas fa-check"></i></div>
                 <h1>You're All Set!</h1>
-                <p className="subtitle">We've created your personalized plan. Your dashboard is ready to guide you.</p>
-                <div className="complete-screen-buttons">
-                    <button className="primary-button" onClick={() => navigate('/dashboard')}>Get Started →</button>
-                    <button className="secondary-button" onClick={handleResetForTesting}>Reset Profile for Testing</button>
-                </div>
+                <p>Redirecting to your dashboard...</p>
             </div>
         );
     }
@@ -252,24 +277,26 @@ const ProfileSetupWizard = () => {
 
     return (
         <div className="setup-container step-view">
-            <div className="progress-bar">
-                Step {step} of 4
-                <div className="progress-line" style={{ width: `${(step / 4) * 100}%` }}></div>
-            </div>
-
             <h2>{currentTitle}</h2>
 
-            {StepComponent && <StepComponent formData={formData} updateFormData={updateFormData} />}
+            {(saveError || error) && (
+                <div className="error-message">
+                    {saveError || error}
+                </div>
+            )}
+
+            {StepComponent && (
+                <StepComponent
+                    formData={formData}
+                    updateFormData={updateFormData}
+                />
+            )}
 
             <div className="navigation-buttons">
-                <button className="secondary-button" onClick={handleBack} disabled={isSaving || step === 0}>
+                <button onClick={handleBack} disabled={isSaving || step === 0}>
                     ← Back
                 </button>
-                <button
-                    className="primary-button"
-                    onClick={handleNext}
-                    disabled={isSaving}
-                >
+                <button onClick={handleNext} disabled={isSaving}>
                     {step === 4 ? (isSaving ? 'Completing...' : 'Complete →') : 'Next →'}
                 </button>
             </div>
