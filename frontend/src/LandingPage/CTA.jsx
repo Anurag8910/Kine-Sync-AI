@@ -28,7 +28,7 @@ export default function CTA() {
             <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center" style={{ position: "relative" }}>
 
                 <div className="section-label" style={{ justifyContent: "center" }}>
-                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">✦ Get Started Today </span>
+                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ Get Started Today </span>
                 </div>
 
                 <h2 style={{

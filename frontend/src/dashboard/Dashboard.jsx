@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import DashboardHeader from "./DashboardHeader";
 import DashboardStats from "./DashboardStats";
 import MacroCard from "./MacroCard";
@@ -10,26 +10,35 @@ import WaterSleepChart from "./WaterSleepChart";
 import { useUser } from "../pages/UserContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
+// Memoized child components to prevent re-renders
+const MemoizedHeader = React.memo(DashboardHeader);
+const MemoizedStats = React.memo(DashboardStats);
+const MemoizedMacroCard = React.memo(MacroCard);
+const MemoizedWeightCard = React.memo(WeightTrackerCard);
+const MemoizedCalendar = WorkoutCalendar;const MemoizedBodyFat = React.memo(BodyFatCard);
+const MemoizedActivities = React.memo(RecentActivitiesCard);
+const MemoizedWaterSleep = React.memo(WaterSleepChart);
+
 const Dashboard = () => {
-  const { userData, fetchUserData, fetchDashboardLogs, logout } = useUser();
+  const { userData, logout, loading } = useUser();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    try {
-      if(!userData) fetchUserData();
-      if(!userData) fetchDashboardLogs();
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  // Memoize userName to prevent recalculation
+  const userName = useMemo(() => userData?.auth?.name || "Trainee", [userData?.auth?.name]);
 
-  // ✅ FIXED (no crash)
-  const userName = userData?.auth?.name || "Trainee";
+  // Show loading state while data fetches
+  if (loading && !userData?.auth?.name) {
+    return (
+      <div className="bg-[#0D1117] text-white font-sans w-full min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div style={{height:"200vh"}} className="bg-[#0D1117] text-white font-sans w-full">
       <div className="p-4 sm:p-6 md:p-8">
-        <DashboardHeader userName={userName} />
+        <MemoizedHeader userName={userName} />
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-4 mt-4">
@@ -54,20 +63,20 @@ const Dashboard = () => {
         </div>
 
         <main className="mt-6">
-          <DashboardStats />
+          <MemoizedStats />
 
           <div className="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-1 space-y-6">
-              <MacroCard />
-              <BodyFatCard />
+              <MemoizedMacroCard />
+              <MemoizedBodyFat />
             </div>
             <div className="lg:col-span-2 space-y-6">
-              <WeightTrackerCard />
-              <RecentActivitiesCard />
+              <MemoizedWeightCard />
+              <MemoizedActivities />
             </div>
             <div className="lg:col-span-1 space-y-6">
-              <WorkoutCalendar />
-              <WaterSleepChart />
+              <MemoizedCalendar />
+              <MemoizedWaterSleep />
             </div>
           </div>
         </main>

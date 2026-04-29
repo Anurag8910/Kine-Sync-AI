@@ -6,7 +6,7 @@ export default function Showcase() {
             <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
 
                 <div className="section-label" style={{ justifyContent: "center" }}>
-                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">✦ Dashboard Preview</span>
+                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ Dashboard Preview</span>
                 </div>
 
                 <h2 style={{

@@ -83,12 +83,12 @@
 
 // export default MacroCard;
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import MacroProgressBar from "./MacroProgessBar";
 import { useUser } from '../pages/UserContext';
 import UpdateMacroForm from './UpdateMacroForm';
 
-const MacroCard = () => {
+const MacroCard = React.memo(() => {
     const {
         userData,
         getTodaysMacros,
@@ -96,13 +96,12 @@ const MacroCard = () => {
         resetTodaysLogs
     } = useUser();
 
-    // ✅ Safe macros fallback
-    const todaysMacros = getTodaysMacros ? getTodaysMacros() : {};
+    // Memoize macros calculation
+    const todaysMacros = useMemo(() => getTodaysMacros ? getTodaysMacros() : {}, [getTodaysMacros]);
     const carbs = todaysMacros?.carbs || 0;
     const protein = todaysMacros?.protein || 0;
     const fat = todaysMacros?.fat || 0;
 
-    // ✅ Safe metrics fallback
     const metrics = userData?.metrics || {};
     const targetCarbs = metrics.targetCarbs ?? 220;
     const targetProtein = metrics.targetProtein ?? 120;
@@ -110,11 +109,11 @@ const MacroCard = () => {
 
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    const macrosData = [
+    const macrosData = useMemo(() => [
         { label: 'Carbs', consumed: carbs, goal: targetCarbs, color: 'bg-blue-500' },
         { label: 'Protein', consumed: protein, goal: targetProtein, color: 'bg-red-500' },
         { label: 'Fat', consumed: fat, goal: targetFat, color: 'bg-yellow-500' },
-    ];
+    ], [carbs, protein, fat, targetCarbs, targetProtein, targetFat]);
 
     const handleAddLog = (logEntry) => {
         if (addDailyLog) {
@@ -131,7 +130,6 @@ const MacroCard = () => {
                 </h2>
 
                 <div className="flex space-x-2">
-                    {/* ✅ Safe reset */}
                     <button
                         onClick={() => resetTodaysLogs && resetTodaysLogs()}
                         className="text-sm px-3 py-1 rounded-lg bg-red-600 hover:bg-red-700 transition duration-200"
@@ -170,6 +168,6 @@ const MacroCard = () => {
             </div>
         </div>
     );
-};
+});
 
 export default MacroCard;

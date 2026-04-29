@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { useUser } from "../pages/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -11,14 +11,11 @@ const gaugeData = [
   { name: "Above", value: 4, color: "#EF4444" },
 ];
 
-// ✅ Needle component (fixed math)
-const CustomNeedle = ({ cx, cy, value }) => {
+const CustomNeedle = React.memo(({ cx, cy, value }) => {
   const safeValue = isNaN(value) ? 0 : value;
   const clamped = Math.max(0, Math.min(safeValue, 30));
-
   const angle = 180 + (clamped / 30) * 180;
   const length = 80;
-
   const rad = (-angle * Math.PI) / 180;
   const x = cx + length * Math.cos(rad);
   const y = cy + length * Math.sin(rad);
@@ -29,24 +26,22 @@ const CustomNeedle = ({ cx, cy, value }) => {
       <path d={`M ${cx} ${cy} L ${x} ${y}`} stroke="#d1d5db" strokeWidth={2} />
     </g>
   );
-};
+});
 
-const BodyFatCard = () => {
+const BodyFatCard = React.memo(() => {
   const { getLatestBFP } = useUser();
   const navigate = useNavigate();
 
-  const rawValue = getLatestBFP ? getLatestBFP() : null;
+  const rawValue = useMemo(() => getLatestBFP ? getLatestBFP() : null, [getLatestBFP]);
   const userBFPValue = typeof rawValue === "number" ? rawValue : 0;
 
-  const getStatusInfo = (bfp) => {
-    if (bfp <= 8) return { text: "Essential", color: "text-red-500" };
-    if (bfp <= 15) return { text: "Excellent", color: "text-orange-500" };
-    if (bfp <= 21) return { text: "Good", color: "text-green-500" };
-    if (bfp <= 26) return { text: "Average", color: "text-blue-500" };
+  const status = useMemo(() => {
+    if (userBFPValue <= 8) return { text: "Essential", color: "text-red-500" };
+    if (userBFPValue <= 15) return { text: "Excellent", color: "text-orange-500" };
+    if (userBFPValue <= 21) return { text: "Good", color: "text-green-500" };
+    if (userBFPValue <= 26) return { text: "Average", color: "text-blue-500" };
     return { text: "Above Average", color: "text-red-500" };
-  };
-
-  const status = getStatusInfo(userBFPValue);
+  }, [userBFPValue]);
 
   return (
     <div className="bg-[#161B22] p-5 rounded-xl border border-gray-800 flex flex-col justify-between">
@@ -55,7 +50,6 @@ const BodyFatCard = () => {
           Body Fat Percentage
         </h2>
 
-        {/* ✅ FIXED: NO ResponsiveContainer */}
         <div className="relative flex justify-center">
           <PieChart width={400} height={250}>
             <Pie
@@ -74,29 +68,19 @@ const BodyFatCard = () => {
                 <Cell key={entry.name} fill={entry.color} />
               ))}
             </Pie>
-
             <CustomNeedle cx={200} cy={180} value={userBFPValue} />
           </PieChart>
 
-          {/* Center text */}
           <div className="absolute top-[60%] left-1/2 -translate-x-1/2 text-center">
-            <p className="text-4xl font-bold text-white">
-              {userBFPValue}%
-            </p>
-            <p className={`text-sm font-semibold ${status.color}`}>
-              {status.text}
-            </p>
+            <p className="text-4xl font-bold text-white">{userBFPValue}%</p>
+            <p className={`text-sm font-semibold ${status.color}`}>{status.text}</p>
           </div>
         </div>
 
-        {/* Legend */}
         <div className="flex justify-between text-xs text-gray-400 mt-4 px-2">
           {gaugeData.map((entry) => (
             <div key={entry.name} className="flex flex-col items-center">
-              <span
-                className="w-2 h-2 rounded-full mb-1"
-                style={{ backgroundColor: entry.color }}
-              />
+              <span className="w-2 h-2 rounded-full mb-1" style={{ backgroundColor: entry.color }} />
               <span>{entry.name}</span>
             </div>
           ))}
@@ -112,6 +96,6 @@ const BodyFatCard = () => {
       </button>
     </div>
   );
-};
+});
 
 export default BodyFatCard;

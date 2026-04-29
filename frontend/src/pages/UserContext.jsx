@@ -130,6 +130,7 @@ export const UserProvider = ({ children }) => {
         try {
             const res = await fetch(`${API_BASE}/logs/dashboard`, { headers: authHeader() });
             const data = await res.json();
+            console.log("Dashboard logs response:", data); 
             if (data.success && data.data) {
                 setDailyLogs(data.data.dailyLogs || []);
                 setTrainingLogs(data.data.trainingLogs || []);
@@ -294,7 +295,7 @@ export const UserProvider = ({ children }) => {
         setDailyLogs(prevLogs => prevLogs.filter(entry => entry.date !== todayString));
     };
 
-    // --- LOG ADDERS (API-based) ---
+    // --- LOG ADDERS (API-based) with auto-refresh ---
     const addDailyLog = async (logEntry) => {
         try {
             const res = await fetch(`${API_BASE}/logs/daily`, {
@@ -303,7 +304,11 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(logEntry)
             });
             const data = await res.json();
-            if (data.success && data.data) setDailyLogs(prev => [...prev, data.data]);
+            if (data.success && data.data) {
+                setDailyLogs(prev => [...prev, data.data]);
+                // Auto-refresh all dashboard data to ensure sync
+                fetchDashboardLogs();
+            }
         } catch {}
     };
 
@@ -315,7 +320,10 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(logEntry)
             });
             const data = await res.json();
-            if (data.success && data.data) setTrainingLogs(prev => [...prev, data.data]);
+            if (data.success && data.data) {
+                setTrainingLogs(prev => [...prev, data.data]);
+                fetchDashboardLogs();
+            }
         } catch {}
     };
 
@@ -327,7 +335,10 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(logEntry)
             });
             const data = await res.json();
-            if (data.success && data.data) setSleepLogs(prev => [...prev, data.data]);
+            if (data.success && data.data) {
+                setSleepLogs(prev => [...prev, data.data]);
+                fetchDashboardLogs();
+            }
         } catch {}
     };
 
@@ -339,7 +350,10 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(logEntry)
             });
             const data = await res.json();
-            if (data.success && data.data) setWaterLogs(prev => [...prev, data.data]);
+            if (data.success && data.data) {
+                setWaterLogs(prev => [...prev, data.data]);
+                fetchDashboardLogs();
+            }
         } catch {}
     };
 
@@ -351,7 +365,10 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(logEntry)
             });
             const data = await res.json();
-            if (data.success && data.data) setWeightHistory(prev => [...prev, data.data]);
+            if (data.success && data.data) {
+                setWeightHistory(prev => [...prev, data.data]);
+                fetchDashboardLogs();
+            }
         } catch {}
     };
 
@@ -363,7 +380,10 @@ export const UserProvider = ({ children }) => {
                 body: JSON.stringify(logEntry)
             });
             const data = await res.json();
-            if (data.success && data.data) setBfpLogs(prev => [...prev, data.data]);
+            if (data.success && data.data) {
+                setBfpLogs(prev => [...prev, data.data]);
+                fetchDashboardLogs();
+            }
         } catch {}
     };
 

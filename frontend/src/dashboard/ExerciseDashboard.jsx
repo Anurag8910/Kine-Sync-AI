@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 // 1. IMPORTED 'X' ICON
 import { Play, Info, Video, X } from "lucide-react";
 import PoseDetector from "../model/PoseDetector";
 // 2. IMPORT EXERCISE_RULES TO GET THE INSTRUCTIONS
-import { EXERCISE_RULES } from "../model/exerciseConfig"; 
+import { EXERCISE_RULES } from "../model/exerciseConfig";
+import { UserContext } from "../pages/UserContext"; 
 
 //To add  new exersise, just copy one {block} and paste it here
 const EXERCISES = [
@@ -112,11 +113,40 @@ const ExerciseDashboard = () => {
   // 3. NEW STATE FOR MODAL ID
   const [infoModalId, setInfoModalId] = useState(null);
   const navigate = useNavigate();
+  const { user, token } = useContext(UserContext);
+
+  // Handle exercise completion - store in backend
+  const handleExerciseComplete = async (exerciseData) => {
+    if (token && exerciseData) {
+      try {
+        const response = await fetch('http://localhost:5000/api/logs/exercise', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            exerciseType: exerciseData.exerciseType,
+            duration: exerciseData.duration,
+            reps: exerciseData.reps,
+          }),
+        });
+        const result = await response.json();
+        if (result.success) {
+          console.log('Exercise logged successfully:', result.data);
+        }
+      } catch (error) {
+        console.error('Failed to log exercise:', error);
+      }
+    }
+    // Return to exercise dashboard
+    setActiveExercise(null);
+  };
 
   if(activeExercise) {
     return <PoseDetector
     exerciseId={activeExercise}
-     onExit={() => setActiveExercise(null)}/>;
+    onExit={handleExerciseComplete}/>;
   }
 
   const handleStart = (id) => {

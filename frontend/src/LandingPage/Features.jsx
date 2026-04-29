@@ -74,7 +74,7 @@ export default function Features() {
 
                 <div className="section-label" style={{ justifyContent: "center" }}>
                     
-                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">✦ Features</span>
+                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ Features</span>
                 </div>
 
                 <h2 style={{

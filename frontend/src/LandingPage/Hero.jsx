@@ -42,7 +42,7 @@ export default function Hero() {
                     <div className="text-center md:text-left">
                         <div className="section-label animate-fade-in-up" style={{ animationDelay: "0ms", justifyContent: "center" }}
                             data-md-justify="flex-start">
-                            <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">✦ AI-Powered Fitness</span>
+                            <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ AI-Powered Fitness</span>
                         </div>
 
                         <h1

@@ -1,40 +1,41 @@
 // src/components/DashboardStats.jsx
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Clock, Moon, Droplets } from "lucide-react";
 import StatCard from "./StatCard";
 import { useUser } from '../pages/UserContext'; 
 
-const DashboardStats = () => {
+const DashboardStats = React.memo(() => {
     const { 
         getWeeklyTrainingTime, 
         getWeeklyAverageSleep,
-        getTodaysWaterIntake // 🎯 NEW
+        getTodaysWaterIntake
     } = useUser();
     
-    // Calculate live values
-    const trainingStats = getWeeklyTrainingTime();
-    const sleepStats = getWeeklyAverageSleep();
-    const waterStats = getTodaysWaterIntake(); 
+    // Memoize stats calculation
+    const statsData = useMemo(() => {
+        const trainingStats = getWeeklyTrainingTime();
+        const sleepStats = getWeeklyAverageSleep();
+        const waterStats = getTodaysWaterIntake(); 
 
-    const statsData = [
-        {
-            title: 'Total Training Time This Week',
-            value: trainingStats.display, 
-            icon: Clock
-        },
-        {
-            title: 'Average Sleep This Week',
-            value: sleepStats.display, 
-            icon: Moon  
-        },
-        {
-            title: "Today's Water Intake",
-            // 🎯 Use LIVE calculated data (e.g., "6/8 glasses")
-            value: waterStats.display, 
-            icon: Droplets 
-        },
-    ];
+        return [
+            {
+                title: 'Total Training Time This Week',
+                value: trainingStats.display, 
+                icon: Clock
+            },
+            {
+                title: 'Average Sleep This Week',
+                value: sleepStats.display, 
+                icon: Moon  
+            },
+            {
+                title: "Today's Water Intake",
+                value: waterStats.display, 
+                icon: Droplets 
+            },
+        ];
+    }, [getWeeklyTrainingTime, getWeeklyAverageSleep, getTodaysWaterIntake]);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -48,6 +49,6 @@ const DashboardStats = () => {
             ))}
         </div>
     );
-};
+});
 
 export default DashboardStats;

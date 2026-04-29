@@ -40,7 +40,7 @@ export default function Steps() {
             <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
 
                 <div className="section-label" style={{ justifyContent: "center" }}>
-                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">✦ How It Works</span>
+                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ How It Works</span>
                 </div>
 
                 <h2 style={{
