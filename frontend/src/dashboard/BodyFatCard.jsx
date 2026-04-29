@@ -29,11 +29,15 @@ const CustomNeedle = React.memo(({ cx, cy, value }) => {
 });
 
 const BodyFatCard = React.memo(() => {
-  const { getLatestBFP } = useUser();
+  const { bfpLogs } = useUser();
   const navigate = useNavigate();
 
-  const rawValue = useMemo(() => getLatestBFP ? getLatestBFP() : null, [getLatestBFP]);
-  const userBFPValue = typeof rawValue === "number" ? rawValue : 0;
+  // Get latest BFP directly from bfpLogs state
+  const userBFPValue = useMemo(() => {
+    if (!bfpLogs || bfpLogs.length === 0) return 15; // Default value
+    const sortedLogs = [...bfpLogs].sort((a, b) => new Date(b.date) - new Date(a.date));
+    return sortedLogs[0]?.bfp || 15;
+  }, [bfpLogs]);
 
   const status = useMemo(() => {
     if (userBFPValue <= 8) return { text: "Essential", color: "text-red-500" };

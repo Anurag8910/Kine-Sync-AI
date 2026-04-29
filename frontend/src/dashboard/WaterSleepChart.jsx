@@ -11,9 +11,49 @@ import {
 import { useUser } from "../pages/UserContext";
 
 const WaterSleepChart = React.memo(() => {
-  const { getLastSevenDaysLogs } = useUser();
+  const { waterLogs, sleepLogs } = useUser();
 
-  const historyData = useMemo(() => getLastSevenDaysLogs ? getLastSevenDaysLogs() : [], [getLastSevenDaysLogs]);
+  // Build last 7 days data directly from context state
+  const historyData = useMemo(() => {
+    const dataMap = new Map();
+    const today = new Date();
+
+    // Initialize all 7 days with zeros
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const dateString = d.toISOString().split('T')[0];
+      const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+      dataMap.set(dateString, { day: dayName, dateKey: dateString, water: 0, sleep: 0 });
+    }
+
+    // Aggregate water logs
+    waterLogs.forEach(log => {
+      const logDate = new Date(log.date).toISOString().split('T')[0];
+      if (dataMap.has(logDate)) {
+        const existing = dataMap.get(logDate);
+        dataMap.set(logDate, { 
+          ...existing, 
+          water: existing.water + (log.glasses || 0) 
+        });
+      }
+    });
+
+    // Aggregate sleep logs
+    sleepLogs.forEach(log => {
+      const logDate = new Date(log.date).toISOString().split('T')[0];
+      if (dataMap.has(logDate)) {
+        const existing = dataMap.get(logDate);
+        dataMap.set(logDate, { 
+          ...existing, 
+          sleep: parseFloat((existing.sleep + (log.durationHours || 0)).toFixed(1))
+        });
+      }
+    });
+
+    return Array.from(dataMap.values())
+      .sort((a, b) => new Date(a.dateKey) - new Date(b.dateKey));
+  }, [waterLogs, sleepLogs]);
 
   return (
     <div className="bg-[#161B22] p-5 rounded-xl border border-gray-800 ">

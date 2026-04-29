@@ -91,13 +91,27 @@ import UpdateMacroForm from './UpdateMacroForm';
 const MacroCard = React.memo(() => {
     const {
         userData,
+        dailyLogs,
         getTodaysMacros,
         addDailyLog,
         resetTodaysLogs
     } = useUser();
 
-    // Memoize macros calculation
-    const todaysMacros = useMemo(() => getTodaysMacros ? getTodaysMacros() : {}, [getTodaysMacros]);
+    // Calculate today's macros directly from dailyLogs for reactivity
+    const todayString = new Date().toISOString().split('T')[0];
+    const todaysMacros = useMemo(() => {
+        const todaysEntries = dailyLogs.filter(entry => {
+            const entryDate = new Date(entry.date).toISOString().split('T')[0];
+            return entryDate === todayString;
+        });
+        return todaysEntries.reduce((acc, entry) => {
+            acc.carbs += entry.carbs || 0;
+            acc.protein += entry.protein || 0;
+            acc.fat += entry.fat || 0;
+            return acc;
+        }, { carbs: 0, protein: 0, fat: 0 });
+    }, [dailyLogs, todayString]);
+
     const carbs = todaysMacros?.carbs || 0;
     const protein = todaysMacros?.protein || 0;
     const fat = todaysMacros?.fat || 0;

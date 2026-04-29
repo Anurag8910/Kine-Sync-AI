@@ -296,6 +296,22 @@ export const UserProvider = ({ children }) => {
     };
 
     // --- LOG ADDERS (API-based) with auto-refresh ---
+    // Helper to replace existing log for the same date or add new one
+    const replaceOrAddLog = (prevLogs, newLog, dateField = 'date') => {
+        const newDate = newLog.date || new Date().toISOString().split('T')[0];
+        const existingIndex = prevLogs.findIndex(log => {
+            const logDate = new Date(log[dateField]).toISOString().split('T')[0];
+            return logDate === newDate;
+        });
+        if (existingIndex >= 0) {
+            // Replace existing entry for this date
+            const updated = [...prevLogs];
+            updated[existingIndex] = newLog;
+            return updated;
+        }
+        return [...prevLogs, newLog];
+    };
+
     const addDailyLog = async (logEntry) => {
         try {
             const res = await fetch(`${API_BASE}/logs/daily`, {
@@ -305,7 +321,7 @@ export const UserProvider = ({ children }) => {
             });
             const data = await res.json();
             if (data.success && data.data) {
-                setDailyLogs(prev => [...prev, data.data]);
+                setDailyLogs(prev => replaceOrAddLog(prev, data.data, 'date'));
                 // Auto-refresh all dashboard data to ensure sync
                 fetchDashboardLogs();
             }
@@ -321,7 +337,7 @@ export const UserProvider = ({ children }) => {
             });
             const data = await res.json();
             if (data.success && data.data) {
-                setTrainingLogs(prev => [...prev, data.data]);
+                setTrainingLogs(prev => replaceOrAddLog(prev, data.data, 'date'));
                 fetchDashboardLogs();
             }
         } catch {}
@@ -336,7 +352,7 @@ export const UserProvider = ({ children }) => {
             });
             const data = await res.json();
             if (data.success && data.data) {
-                setSleepLogs(prev => [...prev, data.data]);
+                setSleepLogs(prev => replaceOrAddLog(prev, data.data, 'date'));
                 fetchDashboardLogs();
             }
         } catch {}
@@ -351,7 +367,7 @@ export const UserProvider = ({ children }) => {
             });
             const data = await res.json();
             if (data.success && data.data) {
-                setWaterLogs(prev => [...prev, data.data]);
+                setWaterLogs(prev => replaceOrAddLog(prev, data.data, 'date'));
                 fetchDashboardLogs();
             }
         } catch {}
@@ -366,7 +382,7 @@ export const UserProvider = ({ children }) => {
             });
             const data = await res.json();
             if (data.success && data.data) {
-                setWeightHistory(prev => [...prev, data.data]);
+                setWeightHistory(prev => replaceOrAddLog(prev, data.data, 'date'));
                 fetchDashboardLogs();
             }
         } catch {}
@@ -381,7 +397,7 @@ export const UserProvider = ({ children }) => {
             });
             const data = await res.json();
             if (data.success && data.data) {
-                setBfpLogs(prev => [...prev, data.data]);
+                setBfpLogs(prev => replaceOrAddLog(prev, data.data, 'date'));
                 fetchDashboardLogs();
             }
         } catch {}
