@@ -1,143 +1,80 @@
 import React from "react";
 
-const steps = [
-    {
-        num: "01",
-        title: "Start Your Workout",
-        desc: "Choose an exercise and simply press start. No equipment needed.",
-        icon: (
-            <svg style={{ width: 28, height: 28 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polygon points="10 8 16 12 10 16 10 8"></polygon>
-            </svg>
-        ),
-    },
-    {
-        num: "02",
-        title: "Get Real-Time Feedback",
-        desc: "AI analyzes your movements and gives instant corrections.",
-        icon: (
-            <svg style={{ width: 28, height: 28 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-        ),
-    },
-    {
-        num: "03",
-        title: "Track Your Progress",
-        desc: "Visualize improvements with detailed analytics.",
-        icon: (
-            <svg style={{ width: 28, height: 28 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-            </svg>
-        ),
-    },
-];
-
 export default function Steps() {
     return (
-        <section id="steps" style={{ padding: "96px 0", background: "rgba(255,255,255,0.015)" }}>
-            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+        <section id="steps" className="py-20">
+            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                
+                {/* Enhanced Container: 
+                  Added a subtle top-to-bottom gradient, overflow-hidden to contain the glow, 
+                  and relative positioning to hold the absolute background elements. 
+                */}
+                <div className="relative bg-gradient-to-b from-[#111624] to-[#0B0F19] overflow-hidden rounded-3xl py-16 px-6 sm:px-12 text-center shadow-2xl border border-gray-800/60">
+                    
+                    {/* Background Enhancement 1: Reusing your grid pattern at a lower opacity */}
+                    <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none"></div>
 
-                <div className="section-label" style={{ justifyContent: "center" }}>
-                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ How It Works</span>
-                </div>
+                    {/* Background Enhancement 2: A soft blue ambient glow at the top center */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-blue-600/10 blur-[80px] pointer-events-none rounded-full"></div>
 
-                <h2 style={{
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: "clamp(36px, 5vw, 52px)",
-                    fontWeight: 900,
-                    textTransform: "uppercase",
-                    letterSpacing: "-0.01em",
-                    color: "#F1F5F9",
-                    marginBottom: "64px",
-                }}>
-                    Perfect Form in 3 Simple Steps
-                </h2>
+                    {/* Content wrapper with z-10 to ensure text and cards sit above the glow/grid */}
+                    <div className="relative z-10">
+                        <h2 className="text-4xl font-bold text-white">
+                            Achieve Perfect Form in 3 Simple Steps
+                        </h2>
 
-                <div className="grid md:grid-cols-3" style={{ gap: "24px", position: "relative" }}>
+                        <div className="mt-16 grid md:grid-cols-3 gap-8">
 
-                    {/* Connector line (desktop) */}
-                    <div style={{
-                        position: "absolute",
-                        top: "52px",
-                        left: "calc(16.66% + 24px)",
-                        right: "calc(16.66% + 24px)",
-                        height: "1px",
-                        background: "linear-gradient(90deg, transparent, rgba(59,130,246,0.3) 30%, rgba(59,130,246,0.3) 70%, transparent)",
-                        display: "none", // shown via media query below — using inline style hack
-                    }} className="steps-connector" />
-
-                    {steps.map(({ num, title, desc, icon }, i) => (
-                        <div
-                            key={i}
-                            className="card-bg hover:scale-110"
-                            style={{
-                                borderRadius: "16px",
-                                padding: "40px 32px",
-                                textAlign: "left",
-                                position: "relative",
-                                overflow: "hidden",
-                            }}
-                        >
-                            {/* Step number watermark */}
-                            <div style={{
-                                position: "absolute",
-                                top: "-10px",
-                                right: "20px",
-                                fontFamily: "'Barlow Condensed', sans-serif",
-                                fontSize: "80px",
-                                fontWeight: 900,
-                                color: "rgba(59,130,246,0.25)",
-                                lineHeight: 1,
-                                userSelect: "none",
-                            }}>{num}</div>
-
-                            {/* Icon */}
-                            <div style={{
-                                width: "56px",
-                                height: "56px",
-                                borderRadius: "12px",
-                                background: "rgba(59,130,246,0.1)",
-                                border: "1px solid rgba(59,130,246,0.2)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#60A5FA",
-                                marginBottom: "24px",
-                            }}>
-                                {icon}
+                            {/* Card Enhancements: 
+                              Made the background slightly transparent (bg-[#1C212E]/80) and 
+                              added backdrop-blur-sm to create a premium frosted glass effect 
+                              over the grid and glow. Added a soft glow to the icons.
+                            */}
+                            {/* Step 1 */}
+                            <div className="card-bg rounded-xl p-8 bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="bg-blue-600/10 p-4 rounded-full inline-block shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                    <svg className="h-8 w-8 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2"
+                                         viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                                    </svg>
+                                </div>
+                                <h3 className="mt-5 text-xl font-semibold text-white">Start Your Workout</h3>
+                                <p className="mt-2 text-gray-400">
+                                    Choose an exercise and simply press start. No equipment needed.
+                                </p>
                             </div>
 
-                            {/* Step label */}
-                            <div style={{
-                                fontFamily: "'Barlow', sans-serif",
-                                fontSize: "11px",
-                                fontWeight: 600,
-                                letterSpacing: "0.14em",
-                                textTransform: "uppercase",
-                                color: "#3B82F6",
-                                marginBottom: "8px",
-                            }}>Step {num}</div>
+                            {/* Step 2 */}
+                            <div className="card-bg rounded-xl p-8 bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="bg-blue-600/10 p-4 rounded-full inline-block shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                    <svg className="h-8 w-8 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2"
+                                         viewBox="0 0 24 24">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 className="mt-5 text-xl font-semibold text-white">Get Real-Time Feedback</h3>
+                                <p className="mt-2 text-gray-400">
+                                    AI analyzes your movements and gives instant corrections.
+                                </p>
+                            </div>
 
-                            <h3 style={{
-                                fontFamily: "'Barlow Condensed', sans-serif",
-                                fontSize: "22px",
-                                fontWeight: 700,
-                                color: "#F1F5F9",
-                                letterSpacing: "0.01em",
-                                textTransform: "uppercase",
-                                marginBottom: "12px",
-                            }}>{title}</h3>
+                            {/* Step 3 */}
+                            <div className="card-bg rounded-xl p-8 bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="bg-blue-600/10 p-4 rounded-full inline-block shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                    <svg className="h-8 w-8 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2"
+                                         viewBox="0 0 24 24">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 className="mt-5 text-xl font-semibold text-white">Track Your Progress</h3>
+                                <p className="mt-2 text-gray-400">
+                                    Visualize improvements with detailed analytics.
+                                </p>
+                            </div>
 
-                            <p style={{
-                                fontFamily: "'Barlow', sans-serif",
-                                fontSize: "15px",
-                                lineHeight: 1.65,
-                                color: "#64748B",
-                            }}>{desc}</p>
                         </div>
-                    ))}
+                    </div>
                 </div>
             </div>
         </section>

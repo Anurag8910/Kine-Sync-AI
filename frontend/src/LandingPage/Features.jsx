@@ -1,166 +1,135 @@
 import React from "react";
 
-const features = [
-    {
-        title: "AI Form Correction",
-        desc: "Get posture feedback with 33+ body point tracking.",
-        icon: (
-            <svg style={{ width: 22, height: 22 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="12" r="6"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
-            </svg>
-        ),
-    },
-    {
-        title: "Personalized Dashboard",
-        desc: "Track your progress with detailed analytics.",
-        icon: (
-            <svg style={{ width: 22, height: 22 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="7" height="7"></rect>
-                <rect x="14" y="3" width="7" height="7"></rect>
-                <rect x="14" y="14" width="7" height="7"></rect>
-                <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-        ),
-    },
-    {
-        title: "Automated Rep Counting",
-        desc: "AI counts every rep accurately.",
-        icon: (
-            <svg style={{ width: 22, height: 22 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <polyline points="17 1 21 5 17 9"></polyline>
-                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-            </svg>
-        ),
-    },
-    {
-        title: "Diet & Nutrition Plans",
-        desc: "Personalized meal plans for your goals.",
-        icon: (
-            <svg style={{ width: 22, height: 22 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8Z"></path>
-            </svg>
-        ),
-    },
-    {
-        title: "Community Support",
-        desc: "Join a vibrant community of fitness lovers.",
-        icon: (
-            <svg style={{ width: 22, height: 22 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="8.5" cy="7" r="4"></circle>
-                <line x1="20" y1="8" x2="20" y2="14"></line>
-                <line x1="23" y1="11" x2="17" y2="11"></line>
-            </svg>
-        ),
-    },
-    {
-        title: "Privacy First",
-        desc: "Your workout data is private & encrypted.",
-        icon: (
-            <svg style={{ width: 22, height: 22 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-        ),
-    },
-];
-
 export default function Features() {
     return (
-        <section id="features" style={{ padding: "96px 0" }}>
-            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
-
-                <div className="section-label" style={{ justifyContent: "center" }}>
+        <section id="features" className="py-20">
+            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                
+                {/* Differentiated Container: Uses a diagonal gradient instead of top-to-bottom */}
+                <div className="relative bg-gradient-to-br from-[#0B0F19] via-[#111624] to-[#0B0F19] overflow-hidden rounded-3xl py-16 px-6 sm:px-12 text-center shadow-2xl border border-gray-800/60">
                     
-                    <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">♧ Features</span>
-                </div>
+                    {/* Background Grid at a slightly lower opacity for variation */}
+                    <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
 
-                <h2 style={{
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: "clamp(36px, 5vw, 52px)",
-                    fontWeight: 900,
-                    textTransform: "uppercase",
-                    letterSpacing: "-0.01em",
-                    color: "#F1F5F9",
-                    marginBottom: "16px",
-                }}>
-                    Everything You Need to Succeed
-                </h2>
+                    {/* Top Right Ambient Glow */}
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none translate-x-1/4 -translate-y-1/4"></div>
 
-                <p style={{
-                    fontFamily: "'Barlow', sans-serif",
-                    fontSize: "16px",
-                    color: "#64748B",
-                    marginBottom: "64px",
-                    maxWidth: "480px",
-                    margin: "0 auto 64px",
-                    lineHeight: 1.6,
-                }}>
-                    A complete toolkit built around your performance — from movement analysis to nutrition.
-                </p>
+                    {/* Bottom Left Ambient Glow (slight indigo tint for depth) */}
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none -translate-x-1/4 translate-y-1/4"></div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3" style={{ gap: "20px" }}>
-                    {features.map(({ title, desc, icon }, i) => (
-                        <div
-                            key={i}
-                            className="card-bg hover:scale-110"
-                            style={{
-                                borderRadius: "14px",
-                                padding: "28px",
-                                textAlign: "left",
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "16px",
-                                position: "relative",
-                                overflow: "hidden",
-                            }}
-                        >
-                            {/* Subtle top accent line */}
-                            <div style={{
-                                position: "absolute",
-                                top: 0,
-                                left: "28px",
-                                right: "28px",
-                                height: "1px",
-                                background: "linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent)",
-                            }} />
-
-                            <div style={{
-                                width: "46px",
-                                height: "46px",
-                                borderRadius: "10px",
-                                background: "rgba(59,130,246,0.1)",
-                                border: "1px solid rgba(59,130,246,0.18)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#60A5FA",
-                                flexShrink: 0,
-                            }}>
-                                {icon}
+                    <div className="relative z-10">
+                        <h2 className="text-4xl font-bold text-white">Everything You Need to Succeed</h2>
+                        
+                        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            
+                            {/* Feature 1 */}
+                            <div className="card-bg rounded-xl p-6 text-left bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="flex items-center space-x-4">
+                                    <div className="bg-blue-600/10 p-3 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                        <svg className="h-6 w-6 text-blue-400" fill="none" stroke="currentColor"
+                                             strokeWidth="2" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <circle cx="12" cy="12" r="6"></circle>
+                                            <circle cx="12" cy="12" r="2"></circle>
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white">AI Form Correction</h3>
+                                </div>
+                                <p className="mt-3 text-gray-400 text-sm">
+                                    Get posture feedback with 33+ body point tracking.
+                                </p>
                             </div>
 
-                            <div>
-                                <h3 style={{
-                                    fontFamily: "'Barlow Condensed', sans-serif",
-                                    fontSize: "19px",
-                                    fontWeight: 700,
-                                    textTransform: "uppercase",
-                                    letterSpacing: "0.02em",
-                                    color: "#F1F5F9",
-                                    marginBottom: "8px",
-                                }}>{title}</h3>
-                                <p style={{
-                                    fontFamily: "'Barlow', sans-serif",
-                                    fontSize: "14px",
-                                    lineHeight: 1.65,
-                                    color: "#64748B",
-                                }}>{desc}</p>
+                            {/* Feature 2 */}
+                            <div className="card-bg rounded-xl p-6 text-left bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="flex items-center space-x-4">
+                                    <div className="bg-blue-600/10 p-3 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                        <svg className="h-6 w-6 text-blue-400" fill="none" stroke="currentColor"
+                                             strokeWidth="2" viewBox="0 0 24 24">
+                                            <rect x="3" y="3" width="7" height="7"></rect>
+                                            <rect x="14" y="3" width="7" height="7"></rect>
+                                            <rect x="14" y="14" width="7" height="7"></rect>
+                                            <rect x="3" y="14" width="7" height="7"></rect>
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white">Personalized Dashboard</h3>
+                                </div>
+                                <p className="mt-3 text-gray-400 text-sm">
+                                    Track your progress with detailed analytics.
+                                </p>
                             </div>
+
+                            {/* Feature 3 */}
+                            <div className="card-bg rounded-xl p-6 text-left bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="flex items-center space-x-4">
+                                    <div className="bg-blue-600/10 p-3 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                        <svg className="h-6 w-6 text-blue-400" fill="none" stroke="currentColor"
+                                             strokeWidth="2" viewBox="0 0 24 24">
+                                            <polyline points="17 1 21 5 17 9"></polyline>
+                                            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white">Automated Rep Counting</h3>
+                                </div>
+                                <p className="mt-3 text-gray-400 text-sm">
+                                    AI counts every rep accurately.
+                                </p>
+                            </div>
+
+                            {/* Feature 4 */}
+                            <div className="card-bg rounded-xl p-6 text-left bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="flex items-center space-x-4">
+                                    <div className="bg-blue-600/10 p-3 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                        <svg className="h-6 w-6 text-blue-400" fill="none" stroke="currentColor"
+                                             strokeWidth="2" viewBox="0 0 24 24">
+                                            <path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8Z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white">Diet & Nutrition Plans</h3>
+                                </div>
+                                <p className="mt-3 text-gray-400 text-sm">
+                                    Personalized meal plans for your goals.
+                                </p>
+                            </div>
+
+                            {/* Feature 5 */}
+                            <div className="card-bg rounded-xl p-6 text-left bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="flex items-center space-x-4">
+                                    <div className="bg-blue-600/10 p-3 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                        <svg className="h-6 w-6 text-blue-400" fill="none" stroke="currentColor"
+                                             strokeWidth="2" viewBox="0 0 24 24">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white">Community Support</h3>
+                                </div>
+                                <p className="mt-3 text-gray-400 text-sm">
+                                    Join a vibrant community of fitness lovers.
+                                </p>
+                            </div>
+
+                            {/* Feature 6 */}
+                            <div className="card-bg rounded-xl p-6 text-left bg-[#1C212E]/80 backdrop-blur-sm border border-gray-800/50 hover:border-blue-500/50 transition-all duration-300">
+                                <div className="flex items-center space-x-4">
+                                    <div className="bg-blue-600/10 p-3 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.15)]">
+                                        <svg className="h-6 w-6 text-blue-400" fill="none" stroke="currentColor"
+                                             strokeWidth="2" viewBox="0 0 24 24">
+                                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-white">Privacy First</h3>
+                                </div>
+                                <p className="mt-3 text-gray-400 text-sm">
+                                    Your workout data is private & encrypted.
+                                </p>
+                            </div>
+
                         </div>
-                    ))}
+                    </div>
                 </div>
             </div>
         </section>
