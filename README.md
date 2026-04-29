@@ -173,16 +173,14 @@ fork → clone → create branch → commit → push → PR
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Team
 
-**Aman Rana**
-B.Tech CSE | MERN Developer
-**Abhishek Bhatt**
-B.Tech CSE | Frontend Developer
-**Anurag Pundir**
-B.Tech CSE | ML Engineer
-**Ayush Rana**
-B.Tech CSE | Full-stack Developer
+<p align="center">
+  <b>Aman Rana</b> — B.Tech CSE | MERN Developer <br>
+  <b>Abhishek Bhatt</b> — B.Tech CSE | Frontend Developer <br>
+  <b>Anurag Pundir</b> — B.Tech CSE | ML Engineer <br>
+  <b>Ayush Rana</b> — B.Tech CSE | Full-stack Developer
+</p>
 
 ---
 
