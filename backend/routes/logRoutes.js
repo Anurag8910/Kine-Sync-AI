@@ -17,5 +17,8 @@ router.post('/bfp', auth, logController.addBfpLog);
 router.post('/daily', auth, logController.addDailyLog);
 // Dashboard
 router.get('/dashboard', auth, logController.getDashboardLogs);
+// Exercise Log
+router.post('/exercise', auth, logController.addExerciseLog);
+router.get('/exercise', auth, logController.getExerciseLogs);
 
 module.exports = router;

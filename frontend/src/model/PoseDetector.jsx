@@ -6,9 +6,10 @@ import { POSE_CONNECTIONS } from "@mediapipe/pose";
 import { calculateAngle, EXERCISE_RULES } from "./exerciseConfig";
 import { Eye, EyeOff } from "lucide-react"; // Optional icon import
 
-const PoseDetector = ({ exerciseId, onExit }) => {
+const PoseDetector = ({ exerciseId, onExit, onComplete }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const startTimeRef = useRef(null);
 
   // State
   const [counter, setCounter] = useState(0);
@@ -128,6 +129,8 @@ const PoseDetector = ({ exerciseId, onExit }) => {
         height: 480,
       });
       camera.start();
+      // Record start time when camera starts
+      startTimeRef.current = Date.now();
     }
 
     return () => {
@@ -135,6 +138,28 @@ const PoseDetector = ({ exerciseId, onExit }) => {
       pose.close();
     };
   }, [config]);
+
+  // Handle exit and pass exercise data to parent
+  const handleExit = () => {
+    const endTime = Date.now();
+    const durationSeconds = startTimeRef.current 
+      ? Math.round((endTime - startTimeRef.current) / 1000) 
+      : 0;
+    
+    const exerciseData = {
+      exerciseType: exerciseId,
+      duration: durationSeconds,
+      reps: counter,
+    };
+    
+    // Call onComplete if provided, otherwise just call onExit
+    if (onComplete) {
+      onComplete(exerciseData);
+    }
+    if (onExit) {
+      onExit(exerciseData);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center bg-slate-950 min-h-screen p-6">
@@ -182,7 +207,7 @@ const PoseDetector = ({ exerciseId, onExit }) => {
       </div>
 
       <button
-        onClick={onExit}
+        onClick={handleExit}
         className="mt-8 bg-slate-800 hover:bg-red-600 text-white px-10 py-3 rounded-full transition-all font-bold"
       >
         Finish Workout

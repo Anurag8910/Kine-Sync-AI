@@ -1,7 +1,7 @@
 import React from "react";
 import {Bell,User,Settings} from 'lucide-react';
 
-const DashboardHeader = ({userName}) => {
+const DashboardHeader = React.memo(({userName}) => {
     return(
         <header className="flex justify-between items-center p-4">
             {/* Greeting Message */}
@@ -26,6 +26,6 @@ const DashboardHeader = ({userName}) => {
             </div>
         </header>
     );
-};
+});
 
 export default DashboardHeader;

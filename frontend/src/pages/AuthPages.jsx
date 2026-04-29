@@ -184,7 +184,7 @@ const AuthPage = ({ onLoginSuccess }) => {
                         color: C.accent, background: C.accentDim,
                         border: '1px solid rgba(59,130,246,0.25)',
                         padding: '5px 14px', borderRadius: '100px', marginBottom: '24px',
-                    }}>✦ AI-Powered Fitness</div>
+                    }}>♧ AI-Powered Fitness</div>
 
                     <h1 style={{
                         fontFamily: C.fontDisplay,
@@ -235,6 +235,30 @@ const AuthPage = ({ onLoginSuccess }) => {
                 background: C.bgBase,
                 position: 'relative',
             }}>
+                {/* Back to Home Button */}
+                <button
+                    onClick={() => navigate('/')}
+                    style={{
+                        position: 'absolute',
+                        top: 24,
+                        left: 24,
+                        background: 'transparent',
+                        border: `1px solid ${C.accent}`,
+                        color: C.accent,
+                        borderRadius: '8px',
+                        padding: '7px 16px',
+                        fontFamily: C.fontDisplay,
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        zIndex: 10,
+                        transition: 'background 0.15s, color 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = C.accentDim}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                    ← 
+                </button>
                 {/* Background grid */}
                 <div style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',

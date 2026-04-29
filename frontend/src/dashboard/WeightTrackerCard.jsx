@@ -79,7 +79,7 @@
 
 // export default WeightTrackerCard;
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
     LineChart,
     Line,
@@ -93,20 +93,18 @@ import {
 import { useUser } from '../pages/UserContext';
 import { useNavigate } from 'react-router-dom';
 
-const WeightTrackerCard = () => {
+const WeightTrackerCard = React.memo(() => {
     const { getWeightHistory } = useUser();
     const navigate = useNavigate();
 
-    // ✅ Safe fallback
-    const fullWeightHistory = getWeightHistory ? getWeightHistory() : [];
+    const fullWeightHistory = useMemo(() => getWeightHistory ? getWeightHistory() : [], [getWeightHistory]);
 
     const today = new Date();
     const fiveMonthsAgo = new Date();
     fiveMonthsAgo.setMonth(today.getMonth() - 4);
     fiveMonthsAgo.setDate(1);
 
-    // ✅ Safe filtering
-    const filteredData = (fullWeightHistory || [])
+    const filteredData = useMemo(() => (fullWeightHistory || [])
         .filter(entry => {
             const date = new Date(entry.date);
             return date >= fiveMonthsAgo && date <= today;
@@ -114,13 +112,12 @@ const WeightTrackerCard = () => {
         .map(entry => ({
             month: new Date(entry.date).toLocaleString('en-US', { month: 'short' }),
             weight: entry.weight,
-        }));
+        })), [fullWeightHistory]);
 
-    // ✅ Safe latest weight
-    const latestWeight =
+    const latestWeight = useMemo(() =>
         fullWeightHistory && fullWeightHistory.length > 0
             ? fullWeightHistory[fullWeightHistory.length - 1].weight
-            : 'N/A';
+            : 'N/A', [fullWeightHistory]);
 
     return (
         <div className="bg-[#161B22] p-5 rounded-xl border border-gray-800 flex flex-col justify-between">
@@ -138,38 +135,10 @@ const WeightTrackerCard = () => {
                         margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-
-                        <XAxis
-                            dataKey="month"
-                            tick={{ fill: '#9CA3AF' }}
-                            stroke="#6B7280"
-                        />
-
-                        {/* ✅ FIXED domain */}
-                        <YAxis
-                            domain={[
-                                (dataMin) => dataMin - 2,
-                                (dataMax) => dataMax + 2
-                            ]}
-                            tick={{ fill: '#9CA3AF' }}
-                            stroke="#6B7280"
-                        />
-
-                        <Tooltip
-                            contentStyle={{
-                                backgroundColor: '#1F2937',
-                                borderColor: '#374151'
-                            }}
-                        />
-
-                        <Line
-                            type="monotone"
-                            dataKey="weight"
-                            stroke="#3B82F6"
-                            strokeWidth={2}
-                            dot={{ r: 4 }}
-                            activeDot={{ r: 6 }}
-                        />
+                        <XAxis dataKey="month" tick={{ fill: '#9CA3AF' }} stroke="#6B7280" />
+                        <YAxis domain={[(dataMin) => dataMin - 2, (dataMax) => dataMax + 2]} tick={{ fill: '#9CA3AF' }} stroke="#6B7280" />
+                        <Tooltip contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151' }} />
+                        <Line type="monotone" dataKey="weight" stroke="#3B82F6" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
@@ -183,6 +152,6 @@ const WeightTrackerCard = () => {
             </button>
         </div>
     );
-};
+});
 
 export default WeightTrackerCard;

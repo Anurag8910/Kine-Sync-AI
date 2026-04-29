@@ -21,6 +21,7 @@ model User {
   waterLogs     WaterLog[]
   weightLogs    WeightLog[]
   bfpLogs       BfpLog[]
+  exerciseLogs  ExerciseLog[]
 }
 
 model Profile {
@@ -93,4 +94,14 @@ model BfpLog {
   userId    Int
   bfp       Float
   date      DateTime
+}
+
+model ExerciseLog {
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int
+  exerciseType  String   // e.g., 'squats', 'pushups', 'plank'
+  duration      Int      // duration in seconds
+  reps          Int?     // optional rep count
+  date          DateTime @default(now())
 }

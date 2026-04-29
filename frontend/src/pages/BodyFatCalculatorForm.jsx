@@ -5,23 +5,33 @@ import { useNavigate } from 'react-router-dom';
 // The U.S. Navy Body Fat Formula (uses inches and pounds)
 const calculateNavyBFP = (gender, height, neck, waist, hip) => {
     // Ensure inputs are numbers and greater than zero
-    if (height <= 0 || neck <= 0 || waist <= 0) return null; 
+    if (!height || !neck || !waist || height <= 0 || neck <= 0 || waist <= 0) return null; 
 
     let bfp;
     
     if (gender === 'male') {
+        // Waist must be larger than neck for valid calculation
+        if (waist <= neck) return null;
+        
         // Formula for Men:
         // BFP = 495 / (1.0324 - 0.19077 * log10(waist - neck) + 0.15456 * log10(height)) - 450
+        const waistMinusNeck = waist - neck;
+        if (waistMinusNeck <= 0) return null;
+        
         const log10_hn = Math.log10(height);
-        const log10_wn = Math.log10(waist - neck);
+        const log10_wn = Math.log10(waistMinusNeck);
 
         // Using a simpler, common regression form for field calculation:
         bfp = 495 / (1.0324 - 0.19077 * log10_wn + 0.15456 * log10_hn) - 450;
     } else if (gender === 'female') {
+        // Hip is required for women
+        if (!hip || hip <= 0) return null; 
+        
+        // Waist + hip must be larger than neck
+        if (waist + hip <= neck) return null;
+        
         // Formula for Women:
         // BFP = 495 / (1.29579 - 0.35004 * log10(waist + hip - neck) + 0.22100 * log10(height)) - 450
-        if (hip <= 0) return null; // Hip is required for women
-        
         const log10_hhw = Math.log10(height);
         const log10_whn = Math.log10(waist + hip - neck);
         
@@ -30,7 +40,8 @@ const calculateNavyBFP = (gender, height, neck, waist, hip) => {
         return null;
     }
 
-    // Return BFP rounded to one decimal place
+    // Return BFP rounded to one decimal place (handle NaN)
+    if (isNaN(bfp) || !isFinite(bfp)) return null;
     return Math.max(0, parseFloat(bfp.toFixed(1)));
 };
 
@@ -78,7 +89,10 @@ const BodyFatCalculatorForm = () => {
 
         const bfp = calculateNavyBFP(gender, h, n, w, p);
 
-        if (bfp !== null && bfp >= 5 && bfp <= 40) { // Check for reasonable BFP bounds
+        // Validate the result - allow wider range for different body types
+        const isValidBFP = bfp !== null && !isNaN(bfp) && bfp >= 2 && bfp <= 50;
+        
+        if (isValidBFP) {
             setCalculatedBFP(bfp);
             
             // 🎯 Log the result to the context
@@ -91,7 +105,14 @@ const BodyFatCalculatorForm = () => {
             setStatusMessage(`✅ Body Fat Percentage calculated and logged: ${bfp}%`);
             
         } else {
-            setStatusMessage('Error: Calculation failed or resulted in an unrealistic value. Check your inputs (must be in inches).');
+            // Provide more helpful error message
+            if (w <= n) {
+                setStatusMessage('Error: Waist measurement must be larger than neck. Please re-measure.');
+            } else if (bfp === null || isNaN(bfp)) {
+                setStatusMessage('Error: Could not calculate BFP. Please check your measurements are in inches and are accurate.');
+            } else {
+                setStatusMessage('Error: Resulted in an unrealistic value. Please enter realistic measurements (in inches).');
+            }
         }
     };
 

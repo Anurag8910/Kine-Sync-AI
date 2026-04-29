@@ -99,6 +99,34 @@ const getDashboardLogs = async (req, res) => {
   }
 };
 
+// Exercise Log
+const addExerciseLog = async (req, res) => {
+  try {
+    const { exerciseType, duration, reps } = req.body;
+    const userId = req.user.id;
+    const log = await prisma.exerciseLog.create({
+      data: { userId, exerciseType, duration, reps },
+    });
+    res.json({ success: true, message: 'Exercise log added', data: log });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to add exercise log', data: null });
+  }
+};
+
+const getExerciseLogs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const logs = await prisma.exerciseLog.findMany({
+      where: { userId },
+      orderBy: { date: 'desc' },
+      take: 20,
+    });
+    res.json({ success: true, message: 'Exercise logs fetched', data: logs });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to fetch exercise logs', data: null });
+  }
+};
+
 module.exports = {
   addWaterLog,
   addSleepLog,
@@ -107,4 +135,6 @@ module.exports = {
   addBfpLog,
   addDailyLog,
   getDashboardLogs,
+  addExerciseLog,
+  getExerciseLogs,
 };
