@@ -2,154 +2,52 @@ import React from "react";
 
 export default function Footer() {
     return (
-        <footer style={{ borderTop: "1px solid rgba(255,255,255,0.07)", marginTop: "0" }}>
-            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8" style={{ padding: "48px 0 32px" }}>
-                <div
-                    className="flex flex-col md:flex-row justify-between items-start"
-                    style={{ gap: "40px" }}
-                >
-                    {/* Brand */}
-                    <div style={{ maxWidth: "260px" }}>
-                        <div style={{
-                            fontFamily: "'Barlow Condensed', sans-serif",
-                            fontSize: "22px",
-                            fontWeight: 800,
-                            letterSpacing: "0.04em",
-                            color: "#F1F5F9",
-                            textTransform: "uppercase",
-                            marginBottom: "12px",
-                        }}>
-                            Kine<span style={{ color: "#3B82F6" }}>-Sync</span>
-                            <span style={{
-                                marginLeft: "6px",
-                                fontSize: "10px",
-                                fontWeight: 600,
-                                letterSpacing: "0.18em",
-                                color: "#3B82F6",
-                                background: "rgba(59,130,246,0.12)",
-                                border: "1px solid rgba(59,130,246,0.25)",
-                                padding: "2px 7px",
-                                borderRadius: "4px",
-                                verticalAlign: "middle",
-                            }}>AI</span>
+        <footer className="mt-12">
+            <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                {/* Top "short" border matching the container width */}
+                <div className="border-t border-gray-800 pt-8">
+                    
+                    <div className="flex flex-col md:flex-row justify-between items-center md:items-center text-center md:text-left">
+                        <div className="mb-6 md:mb-0">
+                            <h3 className="text-xl font-bold text-white">Kine-Sync AI</h3>
+                            <p className="mt-2 text-sm text-gray-400 max-w-md">
+                                Your AI-powered fitness companion for perfect form and better results.
+                            </p>
                         </div>
-                        <p style={{
-                            fontFamily: "'Barlow', sans-serif",
-                            fontSize: "14px",
-                            lineHeight: 1.65,
-                            color: "#475569",
-                        }}>
-                            Your AI-powered fitness companion for perfect form and better results.
-                        </p>
-                    </div>
-
-                    {/* Links + Social */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: "24px", alignItems: "flex-start" }}>
-
-                        {/* Nav links */}
-                        <div style={{ display: "flex", gap: "32px" }}>
-                            {["About Us", "Contact", "Privacy"].map(label => (
-                                <a key={label} href="#" style={{
-                                    fontFamily: "'Barlow', sans-serif",
-                                    fontSize: "14px",
-                                    fontWeight: 500,
-                                    color: "#475569",
-                                    textDecoration: "none",
-                                    transition: "color 0.15s",
-                                }}
-                                onMouseEnter={e => e.target.style.color = "#94A3B8"}
-                                onMouseLeave={e => e.target.style.color = "#475569"}
-                                >{label}</a>
-                            ))}
-                        </div>
-
-                        {/* Social icons */}
-                        <div style={{ display: "flex", gap: "12px" }}>
-                            {/* Twitter/X */}
-                            <a href="#" style={{
-                                width: "34px",
-                                height: "34px",
-                                borderRadius: "8px",
-                                background: "rgba(255,255,255,0.04)",
-                                border: "1px solid rgba(255,255,255,0.08)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#475569",
-                                transition: "all 0.15s",
-                                textDecoration: "none",
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor="rgba(59,130,246,0.3)"; e.currentTarget.style.color="#60A5FA"; }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"; e.currentTarget.style.color="#475569"; }}
-                            >
-                                <svg style={{ width: 15, height: 15 }} fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                </svg>
-                            </a>
-
-                            {/* Instagram */}
-                            <a href="#" style={{
-                                width: "34px",
-                                height: "34px",
-                                borderRadius: "8px",
-                                background: "rgba(255,255,255,0.04)",
-                                border: "1px solid rgba(255,255,255,0.08)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#475569",
-                                transition: "all 0.15s",
-                                textDecoration: "none",
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor="rgba(59,130,246,0.3)"; e.currentTarget.style.color="#60A5FA"; }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"; e.currentTarget.style.color="#475569"; }}
-                            >
-                                <svg style={{ width: 15, height: 15 }} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                    <circle cx="12" cy="12" r="4"></circle>
-                                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-                                </svg>
-                            </a>
-
-                            {/* LinkedIn */}
-                            <a href="#" style={{
-                                width: "34px",
-                                height: "34px",
-                                borderRadius: "8px",
-                                background: "rgba(255,255,255,0.04)",
-                                border: "1px solid rgba(255,255,255,0.08)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#475569",
-                                transition: "all 0.15s",
-                                textDecoration: "none",
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor="rgba(59,130,246,0.3)"; e.currentTarget.style.color="#60A5FA"; }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"; e.currentTarget.style.color="#475569"; }}
-                            >
-                                <svg style={{ width: 15, height: 15 }} fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"></path>
-                                    <circle cx="4" cy="4" r="2"></circle>
-                                </svg>
-                            </a>
+                        
+                        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-12 lg:space-x-20">
+                            <div className="flex space-x-8 text-sm text-gray-300">
+                                <a href="#" className="hover:text-white transition-colors">About Us</a>
+                                <a href="#" className="hover:text-white transition-colors">Contact</a>
+                                <a href="#" className="hover:text-white transition-colors">Privacy</a>
+                            </div>
+                            
+                            <div className="flex space-x-6">
+                                <a href="#" className="text-gray-500 hover:text-white transition-colors">
+                                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                    </svg>
+                                </a>
+                                <a href="#" className="text-gray-500 hover:text-white transition-colors">
+                                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
+                                    </svg>
+                                </a>
+                                <a href="#" className="text-gray-500 hover:text-white transition-colors">
+                                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
+
+                    {/* Bottom "short" border matching the container width */}
+                    <div className="border-t border-gray-800 mt-8 pt-4 pb-2 text-center text-gray-500 text-sm">
+                        &copy; 2026 Kine-Sync AI. All rights reserved.
+                    </div>
+                    
                 </div>
-            </div>
-
-            <div style={{
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                padding: "20px 0",
-                textAlign: "center",
-            }}>
-                <span style={{
-                    fontFamily: "'Barlow', sans-serif",
-                    fontSize: "13px",
-                    color: "#334155",
-                }}>
-                    &copy; 2025 Kine-Sync AI. All rights reserved.
-                </span>
             </div>
         </footer>
     );

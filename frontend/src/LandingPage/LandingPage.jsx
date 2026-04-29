@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 import Navbar from "./Navbar";
 import Hero from "./Hero";
@@ -10,7 +11,7 @@ import Footer from "./Footer";
 
 export default function LandingPage() {
     return (
-        <div className="flex flex-col items-center min-h-screen bg-[#080B12] text-[#F1F5F9] font-[Barlow] antialiased">
+        <div className="bg-[#0B0F19] text-white">
             <Navbar />
             <Hero />
             <Steps />

@@ -36,14 +36,10 @@ export default function Hero() {
             }} />
 
             <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8" style={{ position: "relative" }}>
-                <div className="grid md:grid-cols-2 gap-16 items-center">
+                <div className="grid md:grid-cols-2 gap-16 items-start">
 
                     {/* Text */}
                     <div className="text-center md:text-left">
-                        <div className="section-label animate-fade-in-up" style={{ animationDelay: "0ms", justifyContent: "center" }}
-                            data-md-justify="flex-start">
-                            <span className="bg-blue-500 font-medium px-4 py-2 text-lg rounded-xl">✦ AI-Powered Fitness</span>
-                        </div>
 
                         <h1
                             className="hero-text-gradient animate-fade-in-up"
@@ -100,7 +96,7 @@ export default function Hero() {
                                 onMouseEnter={e => { e.currentTarget.style.background="#2563EB"; e.currentTarget.style.boxShadow="0 0 48px rgba(59,130,246,0.5)"; e.currentTarget.style.transform="translateY(-1px)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.background="#3B82F6"; e.currentTarget.style.boxShadow="0 0 32px rgba(59,130,246,0.35)"; e.currentTarget.style.transform="none"; }}
                             >
-                                Get Started Free →
+                                Get Started →
                             </a>
                             <a
                                 href="#steps"
@@ -129,8 +125,12 @@ export default function Hero() {
 
                     {/* Image */}
                     <div
-                        className="relative hero-image-overlay animate-fade-in-up"
-                        style={{ animationDelay: "200ms", position: "relative" }}
+                        className="relative animate-fade-in-up"
+                        style={{ 
+                            animationDelay: "200ms", 
+                            position: "relative",
+                            marginTop: "40px" 
+                        }}
                     >
                         {/* Glow behind image */}
                         <div style={{
@@ -146,30 +146,13 @@ export default function Hero() {
                             style={{
                                 borderRadius: "14px",
                                 width: "100%",
-                                boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.2)",
+                                boxShadow: "0 32px 80px rgba(0,0,0,0.6)",
                                 position: "relative",
                                 display: "block",
                             }}
                             onError={e => { e.target.src = "https://placehold.co/600x400/1C212E/E5E7EB?text=Live+AI+Session"; }}
                         />
 
-                        {/* Floating stat badge */}
-                        <div style={{
-                            position: "absolute",
-                            bottom: "20px",
-                            left: "20px",
-                            background: "rgba(8,11,18,0.85)",
-                            backdropFilter: "blur(12px)",
-                            border: "1px solid rgba(59,130,246,0.25)",
-                            borderRadius: "10px",
-                            padding: "10px 16px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                        }}>
-                            <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#10B981", boxShadow: "0 0 8px #10B981" }} />
-                            <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: "13px", color: "#F1F5F9", fontWeight: 500 }}>AI Session Active</span>
-                        </div>
                     </div>
 
                 </div>
